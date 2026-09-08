@@ -1,71 +1,112 @@
-require('dotenv').config()
-const axios = require('axios')
-const { Op } = require('sequelize')
-const { Router } = require('express')
-const { YOUR_API_KEY } = process.env
-const { Videogame, Genre } = require('../db')
+import 'dotenv/config';
+import axios from 'axios';
+import { Op } from 'sequelize';
+import { Router } from 'express';
+const { YOUR_API_KEY } = process.env;
 
-const router = Router()
+import { Videogame, Genre } from '../db.js';
+const URL_BASE = `/games?key=${YOUR_API_KEY}`;
+
+const router = Router();
 
 router.get('/', async (req, res) => {
-  const { name } = req.query
+	const page = Number(req.query.page) || 1;
+	const pageSize = 20;
 
-  const include = {
-    model: Genre,
-    attributes: ['name'],
-    through: { attributes: [] }
-  }
-  const queryObj = name
-    ? {
-        where: {
-          name: {
-            [Op.or]: {
-              [Op.substring]: name,
-              [Op.startsWith]: name,
-              [Op.endsWith]: name
-            }
-          }
-        },
-        include
-      }
-    : { include }
+	try {
+		const response = await axios.get(`${URL_BASE}&page=${page}&page_size=${pageSize}`);
 
-  const urlBase = `/games?key=${YOUR_API_KEY}`
+		const games =
+			response.data.results?.map(game => {
+				const { name, rating, id, background_image, genres = [] } = game;
 
-  try {
-    // Peticion a la Base de Datos
-    const GamesDB = await Videogame.findAll(queryObj)
+				return {
+					name,
+					rating,
+					id,
+					background_image,
+					genres: genres.map(genre => genre.name),
+				};
+			}) ?? [];
 
-    // Peticion de Juegos a la Api
-    let GamesAPI = []
-    let urlApi = !name ? urlBase : `${urlBase}&search=${name}`
+		return res.status(200).json(games);
+	} catch (error) {
+		console.error('Error getting videogames:', error);
+		return res.status(500).json({
+			message: 'Error al obtener los videojuegos',
+		});
+	}
+});
 
-    // Para que nos devuelva 100 juegos se realizara 5 veces el proceso (aumentando 20 por cada uno)
-    for (let i = 0; i < 5; i++) {
-      const res = await axios.get(urlApi)
+router.get('/local', async (req, res) => {
+	const include = {
+		model: Genre,
+		attributes: ['name'],
+		through: { attributes: [] },
+	};
 
-      const NewGames = res.data.results
-        ? res.data.results.map(game => {
-            const {
-              name, rating, id: idGame, background_image, genres: allGenres
-            } = game
-            const genres = allGenres.map(genre => genre.name)
-            return { name, rating, idGame, background_image, genres }
-          })
-        : []
+	try {
+		const gamesDB = await Videogame.findAll({ include });
+		return res.status(200).json(gamesDB);
+	} catch (error) {
+		console.error('Error getting videogames:', error);
+		return res.status(500).json({
+			message: 'Error al obtener los videojuegos',
+		});
+	}
+});
 
-      GamesAPI = [...GamesAPI, ...NewGames]
-      urlApi = res.data.next
-    }
+router.get('/search', async (req, res) => {
+	const { name } = req.query;
+	const countGames = 10;
 
-    const gamesAll = [...GamesDB, ...GamesAPI]
+	if (!name?.trim()) {
+		return res.status(400).json({
+			message: 'El parámetro "name" es requerido',
+		});
+	}
 
-    if (!gamesAll.length) { return res.json(false) }
-    return res.json(gamesAll)
-  } catch (err) {
-    console.log('Error: ', err)
-    return res.json([])
-  }
-})
+	const include = {
+		model: Genre,
+		attributes: ['name'],
+		through: { attributes: [] },
+	};
 
-module.exports = router
+	try {
+		const gamesDB = await Videogame.findAll({
+			where: {
+				name: {
+					[Op.substring]: name,
+				},
+			},
+			include,
+		});
+
+		let urlApi = `${URL_BASE}&search=${encodeURIComponent(name)}&page_size=${countGames - gamesDB.length}`;
+
+		const response = await axios.get(urlApi);
+		const gamesApi =
+			response.data.results?.map(game => {
+				const { name, rating, id, background_image, genres = [] } = game;
+
+				return {
+					name,
+					rating,
+					id,
+					background_image,
+					genres: genres.map(genre => genre.name),
+				};
+			}) ?? [];
+
+		const games = [...gamesDB, ...gamesApi];
+
+		return res.status(200).json(games);
+	} catch (error) {
+		console.error('Error searching videogames:', error);
+		return res.status(500).json({
+			message: 'Error al buscar videojuegos',
+		});
+	}
+});
+
+export default router;
