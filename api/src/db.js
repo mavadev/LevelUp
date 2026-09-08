@@ -74,12 +74,12 @@ const formattedModels = Object.fromEntries(
 sequelize.models = formattedModels;
 
 // Obtenemos los modelos para relacionarlos
-const { Videogame, Genre } = sequelize.models;
+const { Game, Genre } = sequelize.models;
 
 // Definir relaciones entre modelos
-Videogame.belongsToMany(Genre, { through: 'game_genre' });
-Genre.belongsToMany(Videogame, { through: 'game_genre' });
+Game.belongsToMany(Genre, { through: 'game_genre' });
+Genre.belongsToMany(Game, { through: 'game_genre' });
 
-export { Videogame, Genre };
+export { Game, Genre };
 export const conn = sequelize;
 export default sequelize.models;

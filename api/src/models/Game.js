@@ -2,7 +2,7 @@ import sequelize from 'sequelize';
 const { DataTypes } = sequelize;
 
 export default sequelize => {
-	sequelize.define('videogame', {
+	sequelize.define('game', {
 		id: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV4,
