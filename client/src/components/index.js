@@ -1,18 +1,18 @@
-export { default as Navbar } from './Navbar/Navbar'
-export { default as NavbarMobile } from './NavbarMobile/NavbarMobile'
-export { default as Search } from './Search/Search'
-export { default as Pagination } from './Pagination/Pagination'
-export { default as ListGames } from './ListGames/ListGames'
-export { default as Game } from './Game/Game'
-export { default as OptionsFilter } from './OptionsFilter/OptionsFilter'
-export { default as Dropdown } from './Dropdown/Dropdown'
-export { default as Footer } from './Footer/Footer'
-export { default as CampoForm } from './CampoForm/CampoForm'
-export { default as ModalImage } from './ModalImage/ModalImage'
-export { default as CampoFormOpts } from './CampoFormOpts/CampoFormOpts'
-export { default as ModalSelectOpts } from './ModalSelectOpts/ModalSelectOpts'
+export { default as Navbar } from './layout/navbar';
+export { default as Footer } from './layout/footer';
 
-export { default as NotFound } from './NotFound/NotFound'
-export { default as LoadingGames } from './LoadingGames/LoadingGames'
-export { default as LoadingDetail } from './LoadingDetail/LoadingDetail'
-export { default as SpinnerLoading } from './SpinnerLoading/SpinnerLoading'
+export { default as GameFilters } from './filters/game-filters';
+export { default as Search } from './filters/search';
+
+export { default as GameCard } from './game/game-card';
+export { default as GameGrid } from './game/game-grid';
+
+export { default as Dropdown } from './ui/dropdown';
+export { default as FormField } from './ui/form-field';
+export { default as FormFieldOpts } from './ui/form-field-opts';
+export { default as GamesLoader } from './ui/games-loader';
+export { default as LoadingDetail } from './ui/loading-detail';
+export { default as ModalImage } from './ui/modal-image';
+export { default as ModalSelectOpts } from './ui/modal-select';
+export { default as Pagination } from './ui/pagination';
+export { default as SpinnerLoader } from './ui/spinner-loader';

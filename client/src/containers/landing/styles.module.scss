@@ -1,0 +1,357 @@
+@use '../../scss/variables.scss';
+@use '../../scss/mixins.scss';
+@use '../../scss/extends.scss';
+@use "sass:color";
+
+#landing {
+  width: 100%;
+  background: $lanFondo;
+
+  #slider {
+    height: 680px;
+    position: relative;
+    overflow: hidden;
+    .game {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #0f0f0f;
+      display: flex;
+      justify-content: flex-end;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      z-index: 1;
+      &.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+      }
+      #gameImage {
+        height: 100%;
+        width: 60%;
+        object-fit: cover;
+        object-position: center;
+      }
+      #container {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        background: linear-gradient(to right, #0f0f0f 40%, transparent 100%);
+        pointer-events: none;
+        #content {
+          width: 100%;
+          height: 100%;
+          max-width: 1440px;
+          padding: 40px 40px 80px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          gap: 20px;
+          text-transform: uppercase;
+          pointer-events: auto;
+          #genre {
+            font-size: 24px;
+            color: $primary;
+            font-weight: 600;
+          }
+          #title {
+            font-size: 48px;
+            color: #efefef;
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
+          #btn {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px 20px;
+            max-width: fit-content;
+            border-radius: 5px;
+            background-color: $primaryDark;
+            color: #fff;
+            transition: background-color 0.3s ease;
+            &:hover {
+              background-color: $primary;
+            }
+          }
+        }
+      }
+    }
+
+    .prevBtn,
+    .nextBtn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      font-size: 24px;
+      padding: 15px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+      &:hover {
+        background: $primary;
+      }
+    }
+    .prevBtn {
+      left: 20px;
+    }
+    .nextBtn {
+      right: 20px;
+    }
+    .dotsContainer {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      gap: 10px;
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+      .activeDot {
+        background: $primary;
+      }
+    }
+  }
+
+  #content {
+    .sectionHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      h2 {
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        span {
+          color: $primary;
+          margin-right: 8px;
+        }
+      }
+      .viewAll {
+        color: $primary;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+    #genres{
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 0;
+      #listGenres {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        #genre{
+          width: 200px;
+          display: flex;
+          aspect-ratio: 3/2;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          position: relative;
+          border-radius: 10px;
+          overflow: hidden;
+          #genreImage{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+          }
+          #genreInfo{
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: grid;
+            place-items: center;
+            #genreName{
+              font-size: 24px;
+            }
+          }
+        }
+      }
+    }
+    #games {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px 0px;
+      #listGames{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+        #game{
+          width: 200px;
+          aspect-ratio: 3/4;
+          border-radius: 10px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          #gameImage{
+            width: 100%;
+            object-fit: cover;
+            object-position: center;
+            flex: 1;
+          }
+          #gameInfo{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+              background-color: #141414;
+            #gameTitle{
+              font-size: 12px;
+              font-weight: bold;
+            }
+            #gameGenre{
+              font-size: 10px;
+              padding: 4px;
+              border: 1px solid;
+              border-color: $primary;
+              color: $primary;
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+    }
+    #platforms {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px 0px;
+      #listPlatforms{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        #platform{
+          flex: 1;
+          height: 400px;
+          display: flex;
+          position: relative;
+          transition: flex 0.3s ease;
+          &:hover{
+            flex:2 1;
+          }
+          #platformImage{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+          }
+          #platformInfo{
+            inset: 0;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: grid;
+            place-items: center;
+            #platformName{
+              font-size: 24px;
+            }
+          }
+        }
+      }
+    }
+    #contact {
+      width: 100%;
+      padding: 40px 0px;
+      .contactContainer {
+        width: 100%;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 50px 40px;
+        border: 1px solid rgba($primary, 0.3);
+        background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        .contactText {
+          max-width: 800px;
+          h2 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+          p {
+            font-size: 16px;
+            color: #b3b3b3;
+            line-height: 1.5;
+            text-wrap: balance;  
+          }
+        }
+
+        .contactBtn {
+          display: inline-block;
+          white-space: nowrap;
+          padding: 16px 32px;
+          font-size: 16px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: #0f0f0f;
+          background-color: $primary;
+          border-radius: 6px;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          box-shadow: 0 0 15px rgba($primary, 0.2);
+
+          &:hover {
+            background-color: color.adjust($primary, $lightness: 10%);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba($primary, 0.5);
+          }
+        }
+      }
+    }
+
+    // Adaptación responsiva
+    @media (max-width: 768px) {
+      #landing #content #contact .contactContainer {
+        flex-direction: column;
+        text-align: center;
+        padding: 35px 20px;
+
+        .contactText h2 {
+          font-size: 24px;
+        }
+
+        .contactBtn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

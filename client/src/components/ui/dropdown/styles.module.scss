@@ -1,0 +1,22 @@
+@use '../../../scss/variables.scss';
+@use '../../../scss/mixins.scss';
+@use '../../../scss/extends.scss';
+
+.dropdown{
+  .header{
+    padding: 10px 0px;
+    cursor: pointer;
+    @include flex($direction: row, $justify: space-between, $align: center);
+    .text{
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .icon{
+      transition: all .3s ease;
+    }
+  }
+  .drop{
+    @extend %flex-column;
+    gap: 10px;
+  }
+}

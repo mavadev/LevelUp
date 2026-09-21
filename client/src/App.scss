@@ -1,4 +1,4 @@
-@import './scss/variables.scss';
+@use './scss/variables.scss';
 
 * {
   margin: 0;
@@ -6,10 +6,10 @@
   color: white;
   user-select: none;
   box-sizing: border-box;
-  font-family: $fontPrimary;
 }
 body{
   background: #141414;
+  font-family: $fontSecondary;
 }
 iframe {
   display: none;
@@ -19,4 +19,12 @@ a{
 }
 li{
   list-style: none;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: $fontPrimary;
+}
+
+.container{
+  max-width: 1140px;
 }

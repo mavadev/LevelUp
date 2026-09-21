@@ -1,0 +1,28 @@
+@use '../../scss/mixins.scss';
+
+#notFound{
+  position: absolute;
+  inset: 0;
+  font-size: 25px;
+  text-align: center;
+  @include flex($direction: column, $justify: center, $align: center);
+  gap: 30px;
+  #desc{
+    max-width: 500px;
+  }
+  #links{
+    @include flex($direction: row, $justify: center, $align: center);
+    gap: 30px;
+    margin-top: 20px;
+    .link{
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+}
+@media screen and (max-width:768px) {
+  #notFound{
+    font-size: 20px;
+    gap: 20px;
+  }
+}

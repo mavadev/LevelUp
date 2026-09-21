@@ -1,71 +1,68 @@
-import axios from 'axios'
-export const SET_PAGE = 'SET_PAGE'
-export const GET_GENRES = 'GET_GENRES'
-export const SET_HISTORY = 'SET_HISTORY'
-export const SET_GAMES_NOW = 'SET_GAMES_NOW'
-export const GET_GAMES_ALL = 'GET_GAMES_ALL'
-export const SET_GAMES_VIEW = 'SET_GAMES_VIEW'
-export const GET_GAMES_NAME = 'GET_GAMES_NAME'
-export const GET_GAME_DETAIL = 'GET_GAME_DETAIL'
-export const SET_BAR_FILTER = 'SET_BAR_FILTER'
-export const SET_NEW_GAME = 'SET_NEW_GAME'
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
 
-// axios.defaults.baseURL = import.meta.env.PROD
-axios.defaults.baseURL = import.meta.env.PROD
-  ? 'https://server-videogames.herokuapp.com'
-  : 'http://localhost:3001'
+axios.defaults.baseURL = import.meta.env.PROD ? '#' : API_URL;
 
-export const setPage = number => {
-  return { type: SET_PAGE, payload: number }
-}
+export const GET_GENRES = 'GET_GENRES';
+export const GET_PLATFORMS = 'GET_PLATFORMS';
+export const GET_TAGS = 'GET_TAGS';
+export const SET_HISTORY = 'SET_HISTORY';
 
-export const getGenres = () => {
-  return async dispatch => {
-    const res = await axios.get('/genres')
-    return dispatch({ type: GET_GENRES, payload: res.data })
-  }
-}
+export const GET_GAMES_PAGE = 'GET_GAMES_PAGE';
+export const FETCH_PAGE_START = 'FETCH_PAGE_START';
 
-export const setHistory = value => {
-  return { type: SET_HISTORY, payload: value }
-}
+// Obtener los géneros
+export const getGenres = () => async dispatch => {
+	const res = await axios.get('/genres');
+	return dispatch({ type: GET_GENRES, payload: res.data });
+};
 
-export const getGamesAll = () => {
-  return async dispatch => {
-    const res = await axios.get('/videogames')
-    return dispatch({ type: GET_GAMES_ALL, payload: res.data })
-  }
-}
+// Obtener las plataformas
+export const getPlatforms = () => async dispatch => {
+	const res = await axios.get('/platforms');
+	return dispatch({ type: GET_PLATFORMS, payload: res.data });
+};
 
-export const getGamesName = name => {
-  return async dispatch => {
-    const res = await axios.get(`/videogames?name=${name}`)
-    return dispatch({ type: GET_GAMES_NAME, payload: res.data })
-  }
-}
+// Obtener las etiquetas
+export const getTags = () => async dispatch => {
+	const res = await axios.get('/tags');
+	return dispatch({ type: GET_TAGS, payload: res.data });
+};
 
-export const setGamesView = payload => {
-  return { type: SET_GAMES_VIEW, payload }
-}
+// Obtener los juegos
+export const getGamesByPage =
+	(page = 1) =>
+	async (dispatch, getState) => {
+		const GAMES_PER_PAGE = 20;
+		const { gamesByPage } = getState();
 
-export const setGamesNow = payload => {
-  return { type: SET_GAMES_NOW, payload }
-}
+		// Si ya se han obtenido los juegos de esta página, no hacer nada
+		if (gamesByPage[page]) return;
 
-export const getGameDetail = id => {
-  if (!id) { return { type: GET_GAME_DETAIL, payload: '' } }
-  return async dispatch => {
-    const res = await axios.get(`/videogame/${id}`)
-    return dispatch({ type: GET_GAME_DETAIL, payload: res.data })
-  }
-}
+		dispatch({ type: FETCH_PAGE_START });
+		try {
+			// Obtenemos los juegos por página
+			const res = await axios.get(`/games?page=${page}&page_size=${GAMES_PER_PAGE}`);
+			const totalPages = Math.ceil(res.data.count / GAMES_PER_PAGE);
 
-export const setBarFilter = () => {
-  return { type: SET_BAR_FILTER }
-}
+			dispatch({
+				type: GET_GAMES_PAGE,
+				payload: {
+					page: page,
+					games: res.data.games,
+					totalPages: totalPages,
+				},
+			});
+		} catch (error) {
+			console.error('Error al cargar la pagina: ', error);
+		}
+	};
 
-export const createGame = (game) => () => axios.post('/videogame', game)
+// Agregar a la historia
+export const setHistory = value => ({ type: SET_HISTORY, payload: value });
 
-export const setNewGame = payload => {
-  return { type: SET_NEW_GAME, payload }
-}
+// Publicar un juego
+export const postGame = game => async () => {
+	const res = await axios.post('/games/local', game);
+	return res.data;
+};

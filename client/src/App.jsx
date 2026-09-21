@@ -1,26 +1,49 @@
-import store from './redux/store'
-import { Provider } from 'react-redux'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import store from './redux/store';
+import { Provider } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import './App.scss'
-import { Navbar, NotFound } from './components'
-import { Landing, Games, DetailGame, CreateGame, About } from './containers'
+import './App.scss';
+import MainLayout from './layouts/MainLayout';
+import { Landing, Games, GameDetail, PostGame, About, NotFound } from './containers';
 
 const App = () => (
-  <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Navbar />}>
-          <Route index element={<Landing />} />
-          <Route path='games' element={<Games />} />
-          <Route path='game/:idGame' element={<DetailGame />} />
-          <Route path='create' element={<CreateGame />} />
-          <Route path='about' element={<About />} />
-          <Route path='*' element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </Provider>
-)
+	<HelmetProvider>
+		<Provider store={store}>
+			<BrowserRouter>
+				<Routes>
+					<Route
+						path='/'
+						element={<MainLayout />}>
+						<Route
+							index
+							element={<Landing />}
+						/>
+						<Route
+							path='juegos'
+							element={<Games />}
+						/>
+						<Route
+							path='juego/:slug'
+							element={<GameDetail />}
+						/>
+						<Route
+							path='publicar'
+							element={<PostGame />}
+						/>
+						<Route
+							path='acerca-de'
+							element={<About />}
+						/>
+						<Route
+							path='*'
+							element={<NotFound />}
+						/>
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</Provider>
+	</HelmetProvider>
+);
 
-export default App
+export default App;
