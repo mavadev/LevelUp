@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
-import { getGamesByPage, getGenres, getPlatforms } from '../../redux/actions';
+import { getGames, getGenres, getPlatforms } from '../../redux/actions';
 
 const Landing = () => {
 	const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const Landing = () => {
 
 	useEffect(() => {
 		if (!genres.length) dispatch(getGenres());
-		if (!games.length) dispatch(getGamesByPage());
+		if (!games.length) dispatch(getGames());
 		if (!platforms.length) dispatch(getPlatforms());
 	}, [dispatch, genres, games, platforms]);
 

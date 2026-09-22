@@ -7,12 +7,10 @@
   min-height: 100vh;
   background-color: $lanFondo;
   padding: 100px 20px;
-
   .container {
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
-
     .header {
       display: flex;
       justify-content: space-between;
@@ -21,18 +19,12 @@
       margin-bottom: 30px;
       padding: 0px 20px 20px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
       .counterGroup {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-
         h2 {
           font-size: 22px;
           font-weight: bold;
           color: #ffffff;
         }
-
         .clearFilters {
           background: none;
           border: none;
@@ -46,12 +38,10 @@
           }
         }
       }
-
       .actionsGroup {
         display: flex;
         align-items: center;
         gap: 15px;
-
         .switchFilter {
           display: none; 
           align-items: center;
@@ -62,24 +52,20 @@
           padding: 10px 16px;
           border-radius: 6px;
           cursor: pointer;
-
           &:hover {
             border-color: $primary;
             color: $primary;
           }
         }
-
         .search {
           position: relative;
           display: flex;
           align-items: center;
-
           .searchIcon {
             position: absolute;
             left: 14px;
             color: #888888;
           }
-
           .searchInput {
             width: 280px;
             padding: 10px 14px 10px 40px;
@@ -95,21 +81,24 @@
               border-color: $primary;
             }
           }
+          .clearIcon {
+            position: absolute;
+            right: 14px;
+            color: #4d4d4d;
+            cursor: pointer;
+          }
         }
       }
     }
-
     .contentLayout {
       display: grid;
       grid-template-columns: 280px 1fr;
       gap: 30px;
       align-items: start;
-
       #sectionFilters {
         position: sticky;
         top: 20px;
       }
-
       #sectionGames {
         width: 100%;
       }
@@ -122,29 +111,23 @@
     .header {
       flex-direction: column;
       align-items: flex-start;
-
       .actionsGroup {
         width: 100%;
         justify-content: space-between;
-
         .switchFilter {
           display: flex; 
         }
-
         .search {
           flex: 1;
           margin-left: 10px;
-
           .searchInput {
             width: 100%;
           }
         }
       }
     }
-
     .contentLayout {
       grid-template-columns: 1fr; 
-
       .sidebar {
         display: none; 
       }

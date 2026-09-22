@@ -1,4 +1,4 @@
-import { GET_TAGS, GET_GENRES, GET_PLATFORMS, GET_GAMES_PAGE, SET_HISTORY, FETCH_PAGE_START } from '../actions';
+import { GET_TAGS, GET_GENRES, GET_PLATFORMS, GET_GAMES, SET_HISTORY, SET_LOADING_GAMES } from '../actions';
 
 const initialState = {
 	genres: [],
@@ -6,8 +6,10 @@ const initialState = {
 	tags: [],
 	history: [],
 
-	gamesByPage: {},
-	loadingPage: false,
+	filteredGames: [],
+	loadingGames: false,
+	totalGames: 0,
+	totalPages: 0,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -21,17 +23,16 @@ export default (state = initialState, { type, payload }) => {
 		case GET_TAGS:
 			return { ...state, tags: payload };
 
-		case FETCH_PAGE_START:
-			return { ...state, loadingPage: true };
+		case SET_LOADING_GAMES:
+			return { ...state, loadingGames: payload };
 
-		case GET_GAMES_PAGE:
+		case GET_GAMES:
+			console.log({ payload });
 			return {
 				...state,
-				gamesByPage: {
-					...state.gamesByPage,
-					[payload.page]: payload.games,
-				},
-				loadingPage: false,
+				filteredGames: payload.games,
+				totalGames: payload.totalGames,
+				totalPages: payload.totalPages,
 			};
 
 		case SET_HISTORY: {

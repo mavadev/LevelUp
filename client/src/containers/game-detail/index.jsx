@@ -12,6 +12,7 @@ const GameDetail = () => {
 	const {
 		game,
 		slide,
+		error,
 		loading,
 		imgSelect,
 		setImgSelect,
@@ -35,11 +36,19 @@ const GameDetail = () => {
 			attr: 'tags',
 		},
 	];
-	console.log({ loading });
+
 	if (loading) {
 		return (
 			<main id={styles.loader}>
 				<h1>Obteniendo el juego...</h1>
+			</main>
+		);
+	}
+
+	if (error) {
+		return (
+			<main id={styles.error}>
+				<h1>Error: {error}</h1>
 			</main>
 		);
 	}

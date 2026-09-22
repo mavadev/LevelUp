@@ -8,18 +8,23 @@ const PADDING_OFFSET = 80;
 const useDetailGame = slugGame => {
 	const [game, setGame] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
 	const [slide, setSlide] = useState({ position: 0, stop: false });
 	const [imgSelect, setImgSelect] = useState({ id: 0, src: '', view: false });
 
 	useEffect(() => {
+		setLoading(true);
 		axios
 			.get(`${API_URL}/games/${slugGame}`)
 			.then(res => {
 				setGame(res.data);
 			})
 			.catch(error => {
-				console.log(`Hubo un error al obtener el juego: ` + error.message);
+				const message = error.response.data.message || error.message;
+				setError(message);
+
+				console.log(`Hubo un error al obtener el juego: ` + message);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -86,6 +91,7 @@ const useDetailGame = slugGame => {
 		game,
 		slide,
 		loading,
+		error,
 		imgSelect,
 		setImgSelect,
 		handleModalImage,

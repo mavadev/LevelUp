@@ -1,117 +1,112 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
-import { FaFilter, FaSearch } from 'react-icons/fa';
-import { useMemo, useState, useEffect } from 'react';
+import { FaFilter, FaSearch, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
-import { getGamesByPage } from '../../redux/actions';
+import { getGames } from '../../redux/actions';
 import { GameFilters, GameGrid, Pagination } from '../../components';
-
-const INITIAL_FILTERS = {
-	genresFilter: [],
-	platformFilter: [],
-	sortOption: 'none',
-	creatorOption: 'all',
-};
-const TOTAL_PAGES = 500;
 
 const Games = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const pageParam = searchParams.get('page') || 1;
-
 	const dispatch = useDispatch();
-	const { gamesByPage, loadingPage } = useSelector(state => state);
 
-	// Estados locales de control
-	const [searchQuery, setSearchQuery] = useState('');
-	const [filters, setFilters] = useState(INITIAL_FILTERS);
-	const [currentPage, setCurrentPage] = useState(Number(pageParam > TOTAL_PAGES ? TOTAL_PAGES : pageParam));
+	// Estado local para el valor del input de búsqueda en tiempo real
 	const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-	// Obtención de juegos por página
+	// Obtenemos los estados locales controlados por la URL
+	const filters = useMemo(
+		() => ({
+			page: Number(searchParams.get('page') || 1),
+			search: searchParams.get('search') || '',
+			genres: searchParams.get('genres')?.split(',').filter(Boolean) || [],
+			platforms: searchParams.get('platforms')?.split(',').filter(Boolean) || [],
+			sort: searchParams.get('sort') || '',
+			creator: searchParams.get('creator') || '',
+		}),
+		[searchParams],
+	);
+
+	// Estado local para el valor del input de búsqueda
+	const [searchTerm, setSearchTerm] = useState(filters.search);
+
+	// Actualizamos el estado local con el valor de búsqueda en la URL
 	useEffect(() => {
-		if (!gamesByPage[currentPage]) dispatch(getGamesByPage(currentPage));
-	}, [dispatch, currentPage]);
+		setSearchTerm(filters.search);
+	}, [filters.search]);
 
-	// Sincronizar el estado cuando la URL cambie (ej: con los botones de ir atrás/adelante del navegador)
+	// Obtenemos los datos desde Redux
+	const { filteredGames, loadingGames, totalGames, totalPages } = useSelector(state => state);
+
+	// Cada vez que cambie los parameters en la URL, pedimos nuevamente los juegos
 	useEffect(() => {
-		const validPage = pageParam > TOTAL_PAGES ? TOTAL_PAGES : pageParam;
-		setCurrentPage(Number(validPage));
-	}, [pageParam]);
+		console.log('LLAMADO A LA API GAMES');
+		const params = Object.fromEntries(searchParams.entries());
+		dispatch(getGames(params));
+	}, [dispatch, searchParams]);
 
-	// Función para cambiar de página y actualizar la URL sin recargar
-	const handlePageChange = newPage => {
-		setCurrentPage(Number(newPage));
-
+	// Función para actualizar filtros
+	const updateParams = newFilters => {
 		setSearchParams(
 			prev => {
-				prev.set('page', newPage.toString());
+				Object.entries(newFilters).forEach(([key, value]) => {
+					if (Array.isArray(value) && value.length > 0) {
+						prev.set(key, value.join(','));
+					} else if (typeof value === 'string' && value.trim().length > 0) {
+						prev.set(key, value);
+					} else if (typeof value === 'number' && value > 0) {
+						prev.set(key, value.toString());
+					} else {
+						prev.delete(key);
+					}
+				});
 				return prev;
 			},
 			{ replace: true },
 		);
 	};
 
-	// Filtrado y Ordenamiento Combinado (Derivado del estado)
-	const filteredGames = useMemo(() => {
-		if (!gamesByPage || !gamesByPage[currentPage]) return [];
-
-		let result = [...gamesByPage[currentPage]];
-
-		// Búsqueda por texto
-		if (searchQuery.trim() !== '') {
-			result = result.filter(game => game.name.toLowerCase().includes(searchQuery.toLowerCase()));
-		}
-
-		// Filtro por Género
-		if (filters.genresFilter.length > 0) {
-			result = result.filter(game =>
-				game.genres?.some(g => filters.genresFilter.includes(typeof g === 'string' ? g : g.name)),
-			);
-		}
-
-		// Filtro por Plataforma
-		if (filters.platformFilter.length > 0) {
-			result = result.filter(game =>
-				game.platforms?.some(p => filters.platformFilter.includes(typeof p === 'string' ? p : p.name)),
-			);
-		}
-
-		// Filtro por Origen (API vs DB)
-		if (filters.creatorOption === 'gamesDB') {
-			result = result.filter(g => Boolean(Number(g.id)));
-		} else if (filters.creatorOption === 'gamesAPI') {
-			result = result.filter(g => !Number(g.id));
-		}
-
-		// Ordenamiento
-		if (filters.sortOption === 'asc_title') {
-			result.sort((a, b) => a.name.localeCompare(b.name));
-		} else if (filters.sortOption === 'desc_title') {
-			result.sort((a, b) => b.name.localeCompare(a.name));
-		} else if (filters.sortOption === 'asc_rating') {
-			result.sort((a, b) => (a.rating || 0) - (b.rating || 0));
-		} else if (filters.sortOption === 'desc_rating') {
-			result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-		}
-
-		return result;
-	}, [gamesByPage[currentPage], searchQuery, filters]);
-
-	// Handlers para resetear o actualizar filtros y resetear la página a 1
-	const handleFilterChange = newFilters => {
-		setFilters(newFilters);
-		handlePageChange(1);
-	};
-	const handleSearchChange = e => {
-		setSearchQuery(e.target.value);
-		handlePageChange(1);
-	};
+	// Función para borrar todos los filtros
 	const handleResetAll = () => {
-		setFilters(INITIAL_FILTERS);
-		setSearchQuery('');
-		handlePageChange(1);
+		setSearchTerm('');
+
+		updateParams({
+			page: 1,
+			search: '',
+			genres: [],
+			platforms: [],
+			sort: '',
+			creator: '',
+		});
+	};
+
+	// Debounce para el input de búsqueda
+	const debounceTimer = useRef(null);
+	const handleSearchChange = e => {
+		const value = e.target.value;
+		setSearchTerm(value);
+
+		if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+		debounceTimer.current = setTimeout(() => {
+			const cleanValue = value.trim();
+			updateParams({
+				...filters,
+				search: cleanValue,
+				page: 1,
+			});
+		}, 400);
+	};
+
+	// Función para borrar la búsqueda actual
+	const clearSearch = () => {
+		updateParams({ ...filters, search: '' });
+	};
+
+	// Función para cambiar de página
+	const handlePageChange = newPage => {
+		updateParams({ ...filters, page: newPage });
 	};
 
 	return (
@@ -123,12 +118,7 @@ const Games = () => {
 				<div className={styles.container}>
 					<header className={styles.header}>
 						<div className={styles.counterGroup}>
-							<h2>{filteredGames.length} resultados</h2>
-							<button
-								className={styles.clearFilters}
-								onClick={handleResetAll}>
-								Borrar filtros
-							</button>
+							{!loadingGames && filters.search && <h2>{totalGames} resultados</h2>}
 						</div>
 						<div className={styles.actionsGroup}>
 							<button
@@ -142,11 +132,17 @@ const Games = () => {
 								<FaSearch className={styles.searchIcon} />
 								<input
 									type='text'
+									value={searchTerm}
 									className={styles.searchInput}
 									placeholder='Buscar juegos...'
-									value={searchQuery}
 									onChange={handleSearchChange}
 								/>
+								{filters.search && (
+									<FaTimes
+										onClick={clearSearch}
+										className={styles.clearIcon}
+									/>
+								)}
 							</div>
 						</div>
 					</header>
@@ -155,24 +151,26 @@ const Games = () => {
 						<aside id={styles.sectionFilters}>
 							<GameFilters
 								filters={filters}
+								handleChange={updateParams}
 								onReset={handleResetAll}
-								onFilterChange={handleFilterChange}
 								onClose={() => setShowMobileFilters(false)}
 							/>
 						</aside>
 						<section id={styles.sectionGames}>
-							{loadingPage ? (
+							{loadingGames ? (
 								<>
 									<h1>Cargando los juegos</h1>
 								</>
 							) : (
-								<GameGrid listGames={filteredGames} />
+								<>
+									<GameGrid listGames={filteredGames} />
+									<Pagination
+										totalPages={totalPages}
+										currentPage={filters.page}
+										handlePageChange={handlePageChange}
+									/>
+								</>
 							)}
-							<Pagination
-								totalPages={TOTAL_PAGES}
-								currentPage={currentPage}
-								handlePageChange={handlePageChange}
-							/>
 						</section>
 					</div>
 				</div>

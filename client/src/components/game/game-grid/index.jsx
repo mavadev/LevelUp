@@ -11,28 +11,32 @@ const ListGames = ({ listGames }) => {
 			</div>
 		);
 	}
-	console.log({ listGames });
+
 	return (
 		<div id={styles.listGames}>
 			{listGames.map(game => (
 				<Link
 					className={styles.game}
-					to={`/juego/${game.slug}`}
-					key={`${game.id}-${game.slug}`}>
+					key={`${game.id}-${game.slug}`}
+					to={`/juego/${game.slug}`}>
 					<img
 						alt={game.name}
 						className={styles.image}
 						src={game.background_image || defaultGameCard}
+						onError={e => {
+							e.target.onerror = null;
+							e.target.src = defaultGameCard;
+						}}
 					/>
 					<div className={styles.content}>
 						<p className={styles.title}>{game.name}</p>
 						<div className={styles.information}>
 							<div className={styles.genres}>
-								{game.genres.slice(0, 3).map((genre, index) => (
+								{game.genres?.slice(0, 3).map((genre, index) => (
 									<h3
 										key={index}
 										className={styles.genre}>
-										{genre}
+										{genre || genre.name}
 									</h3>
 								))}
 							</div>

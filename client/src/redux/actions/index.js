@@ -8,8 +8,8 @@ export const GET_PLATFORMS = 'GET_PLATFORMS';
 export const GET_TAGS = 'GET_TAGS';
 export const SET_HISTORY = 'SET_HISTORY';
 
-export const GET_GAMES_PAGE = 'GET_GAMES_PAGE';
-export const FETCH_PAGE_START = 'FETCH_PAGE_START';
+export const GET_GAMES = 'GET_GAMES';
+export const SET_LOADING_GAMES = 'SET_LOADING_GAMES';
 
 // Obtener los géneros
 export const getGenres = () => async dispatch => {
@@ -30,31 +30,31 @@ export const getTags = () => async dispatch => {
 };
 
 // Obtener los juegos
-export const getGamesByPage =
-	(page = 1) =>
-	async (dispatch, getState) => {
-		const GAMES_PER_PAGE = 20;
-		const { gamesByPage } = getState();
-
-		// Si ya se han obtenido los juegos de esta página, no hacer nada
-		if (gamesByPage[page]) return;
-
-		dispatch({ type: FETCH_PAGE_START });
+export const getGames =
+	(params = {}) =>
+	async dispatch => {
+		console.log('LLEGA AL GET GAMES');
+		// Seteamos el estado de carga en true
+		dispatch({ type: SET_LOADING_GAMES, payload: true });
 		try {
-			// Obtenemos los juegos por página
-			const res = await axios.get(`/games?page=${page}&page_size=${GAMES_PER_PAGE}`);
-			const totalPages = Math.ceil(res.data.count / GAMES_PER_PAGE);
+			// Convertimos el objeto de params a un query string
+			const queryParams = new URLSearchParams(params).toString();
+			const response = await axios.get(`/games?${queryParams}`);
+			const data = await response.data;
 
 			dispatch({
-				type: GET_GAMES_PAGE,
+				type: GET_GAMES,
 				payload: {
-					page: page,
-					games: res.data.games,
-					totalPages: totalPages,
+					games: data.games,
+					totalGames: data.totalGames,
+					totalPages: data.totalPages,
 				},
 			});
 		} catch (error) {
 			console.error('Error al cargar la pagina: ', error);
+		} finally {
+			// Seteamos el estado de carga en false
+			dispatch({ type: SET_LOADING_GAMES, payload: false });
 		}
 	};
 

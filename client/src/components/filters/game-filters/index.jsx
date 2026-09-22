@@ -7,13 +7,12 @@ import styles from './styles.module.scss';
 import { Dropdown } from '../../../components';
 import { getGenres, getPlatforms } from '../../../redux/actions';
 
-const InputGroup = ({ id, name, value, checked, disabled = false, onChange, type = 'checkbox' }) => (
+const InputGroup = ({ id, name, checked, disabled = false, onChange, type = 'checkbox' }) => (
 	<div className={`${styles.inputGroup} ${disabled ? styles.disabled : ''}`}>
 		<div className={styles.checkboxWrapper}>
 			<input
 				id={id}
 				type={type}
-				value={value}
 				checked={checked}
 				disabled={disabled}
 				onChange={onChange}
@@ -23,11 +22,11 @@ const InputGroup = ({ id, name, value, checked, disabled = false, onChange, type
 				{type === 'radio' && checked && <span className={styles.radioDot} />}
 			</span>
 		</div>
-		<label htmlFor={id}>{name || value}</label>
+		<label htmlFor={id}>{name}</label>
 	</div>
 );
 
-const GameFilters = ({ filters, onFilterChange, onReset, onClose }) => {
+const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 	const dispatch = useDispatch();
 	const { genres, platforms } = useSelector(state => state);
 
@@ -43,32 +42,30 @@ const GameFilters = ({ filters, onFilterChange, onReset, onClose }) => {
 		creator: false,
 	});
 
-	const handleGenreChange = genreName => {
-		const isSelected = filters.genresFilter.includes(genreName);
-		const updatedGenres = isSelected
-			? filters.genresFilter.filter(g => g !== genreName)
-			: [...filters.genresFilter, genreName];
+	const handleGenreChange = idGenre => {
+		const isSelected = filters.genres.includes(idGenre);
 
-		onFilterChange({ ...filters, genresFilter: updatedGenres });
+		const updatedGenres = isSelected ? filters.genres.filter(g => g !== idGenre) : [...filters.genres, idGenre];
+		handleChange({ ...filters, genres: updatedGenres });
 	};
 
-	const handlePlatformChange = platformName => {
-		const isSelected = filters.platformFilter.includes(platformName);
-		const updatedPlatforms = isSelected
-			? filters.platformFilter.filter(p => p !== platformName)
-			: [...filters.platformFilter, platformName];
+	const handlePlatformChange = idPlatform => {
+		const isSelected = filters.platforms.includes(idPlatform);
 
-		onFilterChange({ ...filters, platformFilter: updatedPlatforms });
+		const updatedPlatforms = isSelected
+			? filters.platforms.filter(p => p !== idPlatform)
+			: [...filters.platforms, idPlatform];
+		handleChange({ ...filters, platforms: updatedPlatforms });
 	};
 
 	const handleSortChange = value => {
-		const nextValue = filters.sortOption === value ? 'none' : value;
-		onFilterChange({ ...filters, sortOption: nextValue });
+		const newState = filters.sort === value ? '' : value;
+		handleChange({ ...filters, sort: newState });
 	};
 
 	const handleCreatorChange = value => {
-		const nextValue = filters.creatorOption === value ? 'all' : value;
-		onFilterChange({ ...filters, creatorOption: nextValue });
+		const newState = filters.creator === value ? '' : value;
+		handleChange({ ...filters, creator: newState });
 	};
 
 	return (
@@ -101,11 +98,11 @@ const GameFilters = ({ filters, onFilterChange, onReset, onClose }) => {
 							<div className={styles.optionsList}>
 								{genres.map(genre => (
 									<InputGroup
-										key={genre.id || genre.slug}
+										name={genre.name}
 										id={`genre-${genre.slug}`}
-										value={genre.name}
-										checked={filters.genresFilter.includes(genre.name)}
-										onChange={() => handleGenreChange(genre.name)}
+										key={genre.id || genre.slug}
+										onChange={() => handleGenreChange(`${genre.id}`)}
+										checked={filters.genres.includes(`${genre.id}`)}
 									/>
 								))}
 							</div>
@@ -120,11 +117,11 @@ const GameFilters = ({ filters, onFilterChange, onReset, onClose }) => {
 							<div className={styles.optionsList}>
 								{platforms.map(platform => (
 									<InputGroup
-										key={platform.id || platform.slug}
+										name={platform.name}
 										id={`platform-${platform.slug}`}
-										value={platform.name}
-										checked={filters.platformFilter.includes(platform.name)}
-										onChange={() => handlePlatformChange(platform.name)}
+										key={platform.id || platform.slug}
+										onChange={() => handlePlatformChange(`${platform.id}`)}
+										checked={filters.platforms.includes(`${platform.id}`)}
 									/>
 								))}
 							</div>
@@ -138,36 +135,32 @@ const GameFilters = ({ filters, onFilterChange, onReset, onClose }) => {
 							setDrop={setDrop}>
 							<div className={styles.optionsList}>
 								<InputGroup
+									type='radio'
 									id='sort-asc-title'
 									name='Alfabéticamente (A-Z)'
-									value='asc_title'
-									type='radio'
-									checked={filters.sortOption === 'asc_title'}
-									onChange={() => handleSortChange('asc_title')}
+									checked={filters.sort === 'name'}
+									onChange={() => handleSortChange('name')}
 								/>
 								<InputGroup
+									type='radio'
 									id='sort-desc-title'
 									name='Alfabéticamente (Z-A)'
-									value='desc_title'
-									type='radio'
-									checked={filters.sortOption === 'desc_title'}
-									onChange={() => handleSortChange('desc_title')}
+									checked={filters.sort === '-name'}
+									onChange={() => handleSortChange('-name')}
 								/>
 								<InputGroup
+									type='radio'
 									id='sort-asc-rating'
 									name='Rating (Menor-Mayor)'
-									value='asc_rating'
-									type='radio'
-									checked={filters.sortOption === 'asc_rating'}
-									onChange={() => handleSortChange('asc_rating')}
+									checked={filters.sort === 'rating'}
+									onChange={() => handleSortChange('rating')}
 								/>
 								<InputGroup
+									type='radio'
 									id='sort-desc-rating'
 									name='Rating (Mayor-Menor)'
-									value='desc_rating'
-									type='radio'
-									checked={filters.sortOption === 'desc_rating'}
-									onChange={() => handleSortChange('desc_rating')}
+									checked={filters.sort === '-rating'}
+									onChange={() => handleSortChange('-rating')}
 								/>
 							</div>
 						</Dropdown>
@@ -180,20 +173,18 @@ const GameFilters = ({ filters, onFilterChange, onReset, onClose }) => {
 							setDrop={setDrop}>
 							<div className={styles.optionsList}>
 								<InputGroup
+									type='radio'
 									id='creator-db'
 									name='Creados por la comunidad'
-									value='gamesDB'
-									type='radio'
-									checked={filters.creatorOption === 'gamesDB'}
-									onChange={() => handleCreatorChange('gamesDB')}
+									checked={filters.creator === 'db'}
+									onChange={() => handleCreatorChange('db')}
 								/>
 								<InputGroup
+									type='radio'
 									id='creator-api'
 									name='Juegos oficiales (API)'
-									value='gamesAPI'
-									type='radio'
-									checked={filters.creatorOption === 'gamesAPI'}
-									onChange={() => handleCreatorChange('gamesAPI')}
+									checked={filters.creator === 'api'}
+									onChange={() => handleCreatorChange('api')}
 								/>
 							</div>
 						</Dropdown>
