@@ -3,7 +3,7 @@ const { DataTypes } = sequelize;
 
 export default sequelize => {
 	sequelize.define(
-		'genre',
+		'platform',
 		{
 			id: {
 				type: DataTypes.INTEGER,
