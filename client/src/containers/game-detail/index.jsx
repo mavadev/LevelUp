@@ -3,7 +3,7 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import styles from './styles.module.scss';
-import { ModalImage } from '../../components';
+import { GameImage } from '../../components';
 import useDetailGame from '../../hooks/useDetailGame';
 
 const GameDetail = () => {
@@ -53,6 +53,18 @@ const GameDetail = () => {
 		);
 	}
 
+	const formatDate = prevDate => {
+		const date = new Date(`${prevDate}T00:00:00`);
+
+		const formattedDate = date.toLocaleDateString('es-PE', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric',
+		});
+
+		return formattedDate;
+	};
+
 	return (
 		<>
 			<HelmetProvider>
@@ -68,7 +80,7 @@ const GameDetail = () => {
 				<section id={styles.information}>
 					<div id={styles.content}>
 						<h1 id={styles.title}>{game?.name}</h1>
-						<p id={styles.description}>{game?.description_raw}</p>
+						<p id={styles.description}>{game?.description_raw || game.description}</p>
 						<div id={styles.categories}>
 							{categories.map(category => (
 								<div
@@ -76,16 +88,12 @@ const GameDetail = () => {
 									className={styles.category}>
 									<h2 className={styles.categoryTitle}>{category.title}</h2>
 									<div className={styles.categoryList}>
-										{game?.[category.attr]
-											?.map(item => item.name || item)
-											?.slice(0, 3)
-											.map((item, idx) => (
-												<span
-													key={idx}
-													className={styles.value}>
-													{item}
-												</span>
-											))}
+										<span className={styles.value}>
+											{game?.[category.attr]
+												?.map(item => item.name || item)
+												?.slice(0, 3)
+												.join(' · ')}
+										</span>
 									</div>
 								</div>
 							))}
@@ -98,7 +106,7 @@ const GameDetail = () => {
 							<div className={styles.category}>
 								<h2 className={styles.categoryTitle}>Lanzamiento</h2>
 								<div className={styles.categoryList}>
-									<p className={styles.value}>{game?.released}</p>
+									<p className={styles.value}>{formatDate(game?.released)}</p>
 								</div>
 							</div>
 						</div>
@@ -156,14 +164,14 @@ const GameDetail = () => {
 							onClick={moveCarruselNext}
 							className={`${styles.iconMove} ${styles.right}`}
 							style={{
-								display: slide.stop || game.screenshots.length < 3 || window.innerWidth < 480 ? 'none' : 'flex',
+								display: slide.stop || game.screenshots.length <= 5 || window.innerWidth < 480 ? 'none' : 'flex',
 							}}>
 							<FaAngleRight />
 						</button>
 					</section>
 				)}
 				{imgSelect.view && (
-					<ModalImage
+					<GameImage
 						srcImage={imgSelect.src}
 						imgSelect={imgSelect}
 						setImage={setImgSelect}

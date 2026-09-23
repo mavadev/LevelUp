@@ -25,17 +25,17 @@ const Footer = () => (
 						Inicio
 					</Link>
 					<Link
-						to='/juegos'
+						to='/games'
 						className={styles.link}>
 						Juegos
 					</Link>
 					<Link
-						to='/publicar'
+						to='/post-game'
 						className={styles.link}>
 						Publicar
 					</Link>
 					<Link
-						to='/acerca-de'
+						to='/about'
 						className={styles.link}>
 						Nosotros
 					</Link>

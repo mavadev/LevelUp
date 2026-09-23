@@ -28,7 +28,8 @@
     @include flex($direction: row, $justify: center, $align: center);
     gap: 20px;
     #content{
-      @extend %flex-column;
+      display: flex;
+      flex-direction: column;
       gap: 20px;
       flex: 1;
       max-width: 800px;
@@ -118,7 +119,7 @@
       }
     }
     .carrusel{
-      width: 100%;
+      width: max-content;
       max-width: 1440px;
       margin: 0 auto;
       display: flex;

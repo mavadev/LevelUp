@@ -1,89 +1,102 @@
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { postGame } from '../redux/actions';
 import { validate } from '../containers/post-game/validate';
 
+const initialState = {
+	name: '',
+	image: '',
+	description: '',
+	released: '',
+	rating: '',
+	website: '',
+	genres: [],
+	platforms: [],
+	tags: [],
+};
+
 const usePostGame = () => {
-	const { genres, platforms, tags } = useSelector(state => state);
-
-	const initialState = {
-		name: '',
-		image: '',
-		description: '',
-		released: '',
-		rating: '',
-		genres: [],
-		platforms: [],
-		tags: [],
-	};
-	const [send, setSend] = useState(false);
+	const navigate = useNavigate();
 	const [game, setGame] = useState(initialState);
-	const [error, setError] = useState(initialState);
-	const [errorImage, setErrorImage] = useState(false);
-	const [dataSend, setDataSend] = useState({ id: '', send: false, error: false });
+	const [errors, setErrors] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 
-	useEffect(() => {
-		send && !dataSend.send && setError(validate(game));
-	}, [send, game]);
+	const [errorImage, setErrorImage] = useState(false);
+
+	const handleRatingChange = newValue => {
+		setGame({ ...game, rating: Number(newValue) || 0 });
+	};
 
 	const handleInputChange = e => {
-		const name = e.target.name;
-		const value = e.target.value;
-		const checked = e.target.checked;
+		const { name, value, checked } = e.target;
 
+		// Guardar las categorías seleccionadas
 		if (['genres', 'platforms', 'tags'].includes(name)) {
-			return checked && !game[name].includes(value)
-				? setGame({ ...game, [name]: [...game[name], value] })
-				: setGame({ ...game, [name]: game[name].filter(v => v !== value) });
+			setGame(prev => ({
+				...prev,
+				[name]: checked ? [...prev[name], value] : prev[name].filter(v => v !== value),
+			}));
+			return;
 		}
+
 		if (name === 'rating') {
-			return setGame({ ...game, [name]: +value });
+			setGame(prev => ({ ...prev, rating: Number(value) }));
+			return;
 		}
-		if (name === 'image') {
-			setErrorImage(false);
-		}
-		setGame({ ...game, [name]: value });
+
+		setGame(prev => ({ ...prev, [name]: value }));
 	};
 
-	const handleInputSubmit = e => {
+	const handleResetForm = () => {
+		setErrors({});
+		setGame(initialState);
+	};
+
+	const handleSubmit = async e => {
 		e.preventDefault();
-		setSend(true);
+		setIsLoading(true);
 
-		const result = validate(game);
-		setError(result);
+		// Comprueba si no hay ningún mensaje de error en el objeto
+		const validationErrors = validate(game);
+		const hasErrors = Object.values(validationErrors).some(err => Boolean(err && err.length > 0));
 
-		if (Object.values(result || error).every(e => !e.length)) {
-			setDataSend({ send: true });
-			// dispatch(createGame(game))
-			// 	.then(newGame => {
-			// 		setDataSend({ send: true, id: newGame.data.id });
-			// 		setError(initialState);
-			// 		setGame(initialState);
-			// 		e.target.reset();
-			// 	})
-			// 	.catch(() => {
-			// 		setDataSend({ send: true, error: true });
-			// 	})
-			// 	.finally(() => {
-			// 		setSend(false);
-			// 	});
+		// Si hay errores se muestra y no se envía nada
+		if (hasErrors) {
+			console.log('ERRORES');
+
+			setErrors(validationErrors);
+			setIsLoading(false);
+			return;
+		}
+
+		// Caso todo bien, se envía la petición del juego
+		setErrors({});
+		try {
+			const response = await postGame(game);
+			const createdSlug = response?.data?.slug || response?.slug || '';
+
+			setGame(initialState);
+			// Redirection a ver el juego creado
+			if (createdSlug) {
+				navigate(`/games/${createdSlug}`);
+			}
+		} catch (err) {
+			setErrors({ system: err.results?.data?.message || err.message });
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	return {
 		game,
-		setGame,
-		error,
-		tags,
-		genres,
-		platforms,
-		send,
-		dataSend,
-		setDataSend,
+		errors,
+		isLoading,
 		errorImage,
-		setErrorImage,
-		handleInputSubmit,
 		handleInputChange,
+		handleRatingChange,
+		handleResetForm,
+		handleSubmit,
 	};
 };
 

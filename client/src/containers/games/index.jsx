@@ -5,7 +5,7 @@ import { FaFilter, FaSearch, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
-import { getGames } from '../../redux/actions';
+import { getFilteredGames } from '../../redux/actions';
 import { GameFilters, GameGrid, Pagination } from '../../components';
 
 const Games = () => {
@@ -22,8 +22,9 @@ const Games = () => {
 			search: searchParams.get('search') || '',
 			genres: searchParams.get('genres')?.split(',').filter(Boolean) || [],
 			platforms: searchParams.get('platforms')?.split(',').filter(Boolean) || [],
+			tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
 			sort: searchParams.get('sort') || '',
-			creator: searchParams.get('creator') || '',
+			creator: searchParams.get('creator') || 'api',
 		}),
 		[searchParams],
 	);
@@ -37,13 +38,12 @@ const Games = () => {
 	}, [filters.search]);
 
 	// Obtenemos los datos desde Redux
-	const { filteredGames, loadingGames, totalGames, totalPages } = useSelector(state => state);
+	const { filteredGames, loadingGames } = useSelector(state => state);
 
 	// Cada vez que cambie los parameters en la URL, pedimos nuevamente los juegos
 	useEffect(() => {
-		console.log('LLAMADO A LA API GAMES');
 		const params = Object.fromEntries(searchParams.entries());
-		dispatch(getGames(params));
+		dispatch(getFilteredGames(params)).catch(() => handleResetAll());
 	}, [dispatch, searchParams]);
 
 	// Función para actualizar filtros
@@ -76,6 +76,7 @@ const Games = () => {
 			search: '',
 			genres: [],
 			platforms: [],
+			tags: [],
 			sort: '',
 			creator: '',
 		});
@@ -118,7 +119,7 @@ const Games = () => {
 				<div className={styles.container}>
 					<header className={styles.header}>
 						<div className={styles.counterGroup}>
-							{!loadingGames && filters.search && <h2>{totalGames} resultados</h2>}
+							{!loadingGames && filters.search && <h2>{filteredGames.totalGames} resultados</h2>}
 						</div>
 						<div className={styles.actionsGroup}>
 							<button
@@ -163,9 +164,9 @@ const Games = () => {
 								</>
 							) : (
 								<>
-									<GameGrid listGames={filteredGames} />
+									<GameGrid listGames={filteredGames.games} />
 									<Pagination
-										totalPages={totalPages}
+										totalPages={filteredGames.totalPages}
 										currentPage={filters.page}
 										handlePageChange={handlePageChange}
 									/>

@@ -3,7 +3,7 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
 
-const ModalImage = ({ srcImage, imgSelect, setImage, moveCarrusel, iconsMove }) => (
+const GameImage = ({ srcImage, imgSelect, setImage, moveCarrusel, iconsMove }) => (
 	<motion.section
 		id={styles.modalImage}
 		initial={{ x: '-100%' }}
@@ -41,4 +41,4 @@ const ModalImage = ({ srcImage, imgSelect, setImage, moveCarrusel, iconsMove }) 
 	</motion.section>
 );
 
-export default ModalImage;
+export default GameImage;

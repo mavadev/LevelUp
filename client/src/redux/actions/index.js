@@ -7,8 +7,10 @@ export const GET_GENRES = 'GET_GENRES';
 export const GET_PLATFORMS = 'GET_PLATFORMS';
 export const GET_TAGS = 'GET_TAGS';
 export const SET_HISTORY = 'SET_HISTORY';
+export const SET_DROPDOWN = 'SET_DROPDOWN';
 
-export const GET_GAMES = 'GET_GAMES';
+export const GET_FEATURED_GAMES = 'GET_FEATURED_GAMES';
+export const GET_FILTERED_GAMES = 'GET_FILTERED_GAMES';
 export const SET_LOADING_GAMES = 'SET_LOADING_GAMES';
 
 // Obtener los géneros
@@ -29,13 +31,25 @@ export const getTags = () => async dispatch => {
 	return dispatch({ type: GET_TAGS, payload: res.data });
 };
 
-// Obtener los juegos
-export const getGames =
+// Obtener juegos destacados (landing)
+export const getFeaturedGames =
+	(limit = 10) =>
+	async dispatch => {
+		try {
+			const { data } = await axios.get(`/games?limit=${limit}&sort=-rating`);
+			dispatch({ type: GET_FEATURED_GAMES, payload: data.games });
+		} catch (error) {
+			console.error('Error fetching featured games:', error);
+		}
+	};
+
+// Obtener los juegos filtrados
+export const getFilteredGames =
 	(params = {}) =>
 	async dispatch => {
-		console.log('LLEGA AL GET GAMES');
 		// Seteamos el estado de carga en true
 		dispatch({ type: SET_LOADING_GAMES, payload: true });
+
 		try {
 			// Convertimos el objeto de params a un query string
 			const queryParams = new URLSearchParams(params).toString();
@@ -43,7 +57,7 @@ export const getGames =
 			const data = await response.data;
 
 			dispatch({
-				type: GET_GAMES,
+				type: GET_FILTERED_GAMES,
 				payload: {
 					games: data.games,
 					totalGames: data.totalGames,
@@ -51,18 +65,19 @@ export const getGames =
 				},
 			});
 		} catch (error) {
-			console.error('Error al cargar la pagina: ', error);
+			throw new Error('Error al cargar la pagina: ' + error.message);
 		} finally {
 			// Seteamos el estado de carga en false
 			dispatch({ type: SET_LOADING_GAMES, payload: false });
 		}
 	};
 
+export const setOpenDropdowns = dropdown => ({ type: SET_DROPDOWN, payload: dropdown });
+
 // Agregar a la historia
 export const setHistory = value => ({ type: SET_HISTORY, payload: value });
 
 // Publicar un juego
-export const postGame = game => async () => {
-	const res = await axios.post('/games/local', game);
-	return res.data;
+export const postGame = game => {
+	return axios.post('/games/local', game);
 };

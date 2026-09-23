@@ -1,0 +1,41 @@
+@use '../../../scss/variables.scss';
+@use '../../../scss/mixins.scss';
+@use '../../../scss/extends.scss';
+
+.item{
+  width: 200px;
+  display: flex;
+  aspect-ratio: 3/2;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  &:hover{
+    .itemImage{
+      transform: scale(1.2);
+      filter: brightness(0.5);
+    }
+  }
+  .itemImage{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .15s, filter .15s;
+  }
+  .itemInformation{
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: grid;
+    place-items: center;
+    .itemName{
+      font-size: 22px;
+      text-align: center;
+      color: #efefef;
+    }
+  }
+}

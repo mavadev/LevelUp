@@ -1,26 +1,30 @@
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
-import { getGames, getGenres, getPlatforms } from '../../redux/actions';
+import { CategoryCard, GameCard } from '../../components';
+import { getFeaturedGames, getGenres, getPlatforms, getTags, setOpenDropdowns } from '../../redux/actions';
 
 const Landing = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { genres, games, platforms } = useSelector(state => state);
+	const { featuredGames: games, genres, platforms, tags } = useSelector(state => state);
 
 	useEffect(() => {
+		if (!games.length) dispatch(getFeaturedGames());
 		if (!genres.length) dispatch(getGenres());
-		if (!games.length) dispatch(getGames());
+		if (!tags.length) dispatch(getTags());
 		if (!platforms.length) dispatch(getPlatforms());
-	}, [dispatch, genres, games, platforms]);
+	}, [dispatch, games, genres, tags, platforms]);
 
 	const [currentSlide, setCurrentSlide] = useState(0);
 
 	// Derivamos los datos limitados a 5 directamente de los arreglos globales
 	const sliderGames = useMemo(() => games.slice(5, 10), [games]);
-	const topGenres = useMemo(() => genres.slice(0, 5), [genres]);
+	const topGenres = useMemo(() => genres.slice(0, 6), [genres]);
+	const topTags = useMemo(() => tags.slice(0, 6), [tags]);
 	const featuredGames = useMemo(() => games.slice(0, 5), [games]);
 	const topPlatforms = useMemo(() => platforms.slice(0, 5), [platforms]);
 
@@ -41,6 +45,11 @@ const Landing = () => {
 		setCurrentSlide(prev => (prev === sliderGames.length - 1 ? 0 : prev + 1));
 	};
 
+	const handleFilterPlatform = platformId => {
+		dispatch(setOpenDropdowns({ platforms: true }));
+		navigate(`/games?platforms=${platformId}`);
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -59,10 +68,10 @@ const Landing = () => {
 							/>
 							<div id={styles.container}>
 								<div id={styles.content}>
-									<h3 id={styles.genre}>{game.genre}</h3>
+									<h3 id={styles.genre}>{game.genres[0].name}</h3>
 									<p id={styles.title}>{game.name}</p>
 									<a
-										href={`/juego/${game.slug}`}
+										href={`/games/${game.slug}`}
 										id={styles.btn}>
 										Ir al Juego
 									</a>
@@ -94,80 +103,83 @@ const Landing = () => {
 				</section>
 
 				<div id={styles.content}>
-					<section id={styles.genres}>
-						<div className={styles.sectionHeader}>
+					<section>
+						<header>
 							<h2>
 								<span>/</span> EXPLORA POR GÉNEROS
 							</h2>
-							{/* <Link
-								to='/generos'
-								className={styles.viewAll}>
+							<Link
+								to='/category/genres'
+								className={styles.sectionLink}>
 								VER TODOS &#10095;
-							</Link> */}
-						</div>
-						<div id={styles.listGenres}>
+							</Link>
+						</header>
+						<div className={styles.listCategory}>
 							{topGenres.map(genre => (
-								<div
-									key={genre.slug}
-									id={styles.genre}>
-									<img
-										alt={genre.name}
-										id={styles.genreImage}
-										src={genre.background_image}
-									/>
-									<div id={styles.genreInfo}>
-										<h3 id={styles.genreName}>{genre.name}</h3>
-									</div>
-								</div>
+								<CategoryCard
+									type={'genres'}
+									category={genre}
+								/>
 							))}
 						</div>
 					</section>
-					<section id={styles.games}>
-						<div className={styles.sectionHeader}>
+					<section>
+						<header>
 							<h2>
 								<span>/</span>JUEGOS DESTACADOS
 							</h2>
 							<Link
-								to='/juegos'
-								className={styles.viewAll}>
+								to='/category/games'
+								className={styles.sectionLink}>
 								VER TODOS &#10095;
 							</Link>
-						</div>
+						</header>
 						<div id={styles.listGames}>
 							{featuredGames.map(game => (
-								<Link
-									key={game.id}
-									id={styles.game}
-									to={`/juego/${game.slug}`}>
-									<img
-										alt={game.name}
-										id={styles.gameImage}
-										src={game.background_image}
-									/>
-									<div id={styles.gameInfo}>
-										<p id={styles.gameTitle}>{game.name}</p>
-										<h3 id={styles.gameGenre}>{game.genres[0]}</h3>
-									</div>
-								</Link>
+								<GameCard
+									type={1}
+									game={game}
+								/>
 							))}
 						</div>
 					</section>
-					<section id={styles.platforms}>
-						<div className={styles.sectionHeader}>
+					<section>
+						<header>
+							<h2>
+								<span>/</span> EXPLORA POR TAGS
+							</h2>
+							<Link
+								to='/category/tags'
+								className={styles.sectionLink}>
+								VER TODOS &#10095;
+							</Link>
+						</header>
+						<div className={styles.listCategory}>
+							{topTags.map(genre => (
+								<CategoryCard
+									type={'tags'}
+									category={genre}
+								/>
+							))}
+						</div>
+					</section>
+					<section>
+						<header>
 							<h2>
 								<span>/</span>ELIGE TU PLATAFORMA
 							</h2>
-							{/* <Link
-								to='/platforms'
-								className={styles.viewAll}>
+							<Link
+								to='/category/platforms'
+								className={styles.sectionLink}>
 								VER TODOS &#10095;
-							</Link> */}
-						</div>
+							</Link>
+						</header>
 						<div id={styles.listPlatforms}>
 							{topPlatforms.map(platform => (
 								<div
 									key={platform.id}
-									id={styles.platform}>
+									id={styles.platform}
+									onClick={() => handleFilterPlatform(platform.id)}>
 									<img
 										alt={platform.name}
 										id={styles.platformImage}
@@ -181,8 +193,8 @@ const Landing = () => {
 						</div>
 					</section>
 					<section id={styles.contact}>
-						<div className={styles.contactContainer}>
-							<div className={styles.contactText}>
+						<div className={styles.contentContact}>
+							<div className={styles.textContact}>
 								<h2>¿ERES DESARROLLADOR DE JUEGOS?</h2>
 								<p>
 									Publica la información de tu videojuego en Level Up para darle máxima visibilidad ante nuestra
@@ -190,8 +202,8 @@ const Landing = () => {
 								</p>
 							</div>
 							<Link
-								to='/publicar'
-								className={styles.contactBtn}>
+								to='/post-game'
+								className={styles.btnContact}>
 								Publicar Mi Juego
 							</Link>
 						</div>

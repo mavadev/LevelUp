@@ -1,0 +1,34 @@
+@use '../../scss/variables.scss';
+@use '../../scss/mixins.scss';
+@use '../../scss/extends.scss';
+@use "sass:color";
+
+#container {
+  width: 100%;
+  height: max-content;
+  min-height: 100vh;
+  padding: 120px 20px;
+  max-width: 1440px;
+  margin: 0 auto;
+  header{
+    margin-bottom: 30px;
+    .subtitle{
+      color: #efefef;
+      font-size: 16px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .title{
+      font-size: 36px;
+      color: $primary;
+      font-weight: bolder;
+      text-transform: uppercase;
+    }
+  }
+  .listItems {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}

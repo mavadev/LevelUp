@@ -15,12 +15,12 @@ const Navbar = () => {
 		},
 		{
 			name: 'Juegos',
-			ruta: '/juegos',
+			ruta: '/games',
 			icon: <FaGamepad />,
 		},
 		{
 			name: 'Nosotros',
-			ruta: '/acerca-de',
+			ruta: '/about',
 			icon: <FaUserAlt />,
 		},
 	];
@@ -48,7 +48,7 @@ const Navbar = () => {
 						))}
 						<a
 							id={styles.btnCrear}
-							href='/publicar'>
+							href='/post-game'>
 							Publicar Juego
 						</a>
 					</ul>

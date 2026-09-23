@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import styles from './styles.module.scss';
 import { Dropdown } from '../../../components';
-import { getGenres, getPlatforms } from '../../../redux/actions';
+import { getGenres, getPlatforms, getTags, setOpenDropdowns } from '../../../redux/actions';
 
 const InputGroup = ({ id, name, checked, disabled = false, onChange, type = 'checkbox' }) => (
 	<div className={`${styles.inputGroup} ${disabled ? styles.disabled : ''}`}>
@@ -28,34 +28,36 @@ const InputGroup = ({ id, name, checked, disabled = false, onChange, type = 'che
 
 const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 	const dispatch = useDispatch();
-	const { genres, platforms } = useSelector(state => state);
+	const { genres, platforms, tags, dropdownState } = useSelector(state => state);
 
 	useEffect(() => {
 		if (!genres.length) dispatch(getGenres());
 		if (!platforms.length) dispatch(getPlatforms());
-	}, [dispatch, genres, platforms]);
+		if (!tags.length) dispatch(getTags());
+	}, [dispatch, genres, platforms, tags]);
 
-	const [drop, setDrop] = useState({
-		genres: true,
-		platforms: false,
-		order: false,
-		creator: false,
-	});
+	const changeDropdownState = dropdown => {
+		dispatch(setOpenDropdowns(dropdown));
+	};
 
 	const handleGenreChange = idGenre => {
 		const isSelected = filters.genres.includes(idGenre);
-
 		const updatedGenres = isSelected ? filters.genres.filter(g => g !== idGenre) : [...filters.genres, idGenre];
 		handleChange({ ...filters, genres: updatedGenres });
 	};
 
 	const handlePlatformChange = idPlatform => {
 		const isSelected = filters.platforms.includes(idPlatform);
-
 		const updatedPlatforms = isSelected
 			? filters.platforms.filter(p => p !== idPlatform)
 			: [...filters.platforms, idPlatform];
 		handleChange({ ...filters, platforms: updatedPlatforms });
+	};
+
+	const handleTagChange = idTag => {
+		const isSelected = filters.tags.includes(idTag);
+		const updatedTags = isSelected ? filters.tags.filter(p => p !== idTag) : [...filters.tags, idTag];
+		handleChange({ ...filters, tags: updatedTags });
 	};
 
 	const handleSortChange = value => {
@@ -91,10 +93,10 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 						onSubmit={e => e.preventDefault()}>
 						{/* Géneros */}
 						<Dropdown
-							drop={drop}
 							select='genres'
 							title='Géneros'
-							setDrop={setDrop}>
+							drop={dropdownState}
+							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
 								{genres.map(genre => (
 									<InputGroup
@@ -108,12 +110,31 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 							</div>
 						</Dropdown>
 
+						{/* Etiquetas */}
+						<Dropdown
+							title='Tags'
+							select='tags'
+							drop={dropdownState}
+							setDrop={changeDropdownState}>
+							<div className={styles.optionsList}>
+								{tags.map(tag => (
+									<InputGroup
+										name={tag.name}
+										id={`tag-${tag.slug}`}
+										key={tag.id || tag.slug}
+										onChange={() => handleTagChange(`${tag.id}`)}
+										checked={filters.tags.includes(`${tag.id}`)}
+									/>
+								))}
+							</div>
+						</Dropdown>
+
 						{/* Plataformas */}
 						<Dropdown
-							drop={drop}
 							select='platforms'
 							title='Plataformas'
-							setDrop={setDrop}>
+							drop={dropdownState}
+							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
 								{platforms.map(platform => (
 									<InputGroup
@@ -129,36 +150,36 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 
 						{/* Ordenamiento */}
 						<Dropdown
-							drop={drop}
-							select='order'
 							title='Orden'
-							setDrop={setDrop}>
+							select='order'
+							drop={dropdownState}
+							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
 								<InputGroup
 									type='radio'
 									id='sort-asc-title'
-									name='Alfabéticamente (A-Z)'
+									name='Nombre (A - Z)'
 									checked={filters.sort === 'name'}
 									onChange={() => handleSortChange('name')}
 								/>
 								<InputGroup
 									type='radio'
 									id='sort-desc-title'
-									name='Alfabéticamente (Z-A)'
+									name='Nombre (Z - A)'
 									checked={filters.sort === '-name'}
 									onChange={() => handleSortChange('-name')}
 								/>
 								<InputGroup
 									type='radio'
 									id='sort-asc-rating'
-									name='Rating (Menor-Mayor)'
+									name='Rating (Menor a Mayor)'
 									checked={filters.sort === 'rating'}
 									onChange={() => handleSortChange('rating')}
 								/>
 								<InputGroup
 									type='radio'
 									id='sort-desc-rating'
-									name='Rating (Mayor-Menor)'
+									name='Rating (Mayor a Menor)'
 									checked={filters.sort === '-rating'}
 									onChange={() => handleSortChange('-rating')}
 								/>
@@ -167,24 +188,24 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 
 						{/* Creador */}
 						<Dropdown
-							drop={drop}
+							title='Fuente'
 							select='creator'
-							title='Origen'
-							setDrop={setDrop}>
+							drop={dropdownState}
+							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
 								<InputGroup
 									type='radio'
-									id='creator-db'
-									name='Creados por la comunidad'
-									checked={filters.creator === 'db'}
-									onChange={() => handleCreatorChange('db')}
+									id='creator-api'
+									name='Oficiales'
+									checked={filters.creator === 'api'}
+									onChange={() => handleCreatorChange('api')}
 								/>
 								<InputGroup
 									type='radio'
-									id='creator-api'
-									name='Juegos oficiales (API)'
-									checked={filters.creator === 'api'}
-									onChange={() => handleCreatorChange('api')}
+									id='creator-db'
+									name='Comunidad'
+									checked={filters.creator === 'community'}
+									onChange={() => handleCreatorChange('community')}
 								/>
 							</div>
 						</Dropdown>

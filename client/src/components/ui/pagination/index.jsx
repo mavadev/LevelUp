@@ -5,19 +5,16 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
 	if (totalPages <= 1) return null;
 
 	const pages = useMemo(() => {
-		// 1. Obtener el rango alrededor de la página actual
 		const actual = Array.from({ length: totalPages }, (_, i) => i + 1).slice(
 			currentPage === 1 ? 0 : currentPage - 2,
 			currentPage === 1 ? currentPage + 2 : currentPage + 1,
 		);
 
-		// 2. Crear una lista de páginas clave unificando [1, ...actual, totalPages]
 		const rawPages = [...new Set([1, ...actual, totalPages > 500 ? 500 : totalPages])];
 
-		// 3. Insertar null entre números no adyacentes
 		const result = rawPages.reduce((acc, page, index, array) => {
 			if (index > 0 && page - array[index - 1] > 1) {
-				acc.push(null); // O usa '...' si prefieres un string
+				acc.push(null);
 			}
 			acc.push(page);
 			return acc;

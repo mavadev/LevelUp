@@ -17,7 +17,8 @@
     width: 100%;
     overflow: hidden;
     position: absolute;
-    @extend %flex-column;
+    display: flex;
+    flex-direction: column;
     background: $grayDark;
     border-radius: 0px 0px 5px 5px;
     &.hide{

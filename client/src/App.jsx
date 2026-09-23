@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.scss';
 import MainLayout from './layouts/MainLayout';
-import { Landing, Games, GameDetail, PostGame, About, NotFound } from './containers';
+import { Landing, Games, GameDetail, PostGame, About, NotFound, Category } from './containers';
 
 const App = () => (
 	<HelmetProvider>
@@ -20,20 +20,24 @@ const App = () => (
 							element={<Landing />}
 						/>
 						<Route
-							path='juegos'
+							path='games'
 							element={<Games />}
 						/>
 						<Route
-							path='juego/:slug'
+							path='games/:slug'
 							element={<GameDetail />}
 						/>
 						<Route
-							path='publicar'
+							path='post-game'
 							element={<PostGame />}
 						/>
 						<Route
-							path='acerca-de'
+							path='about'
 							element={<About />}
+						/>
+						<Route
+							path='category/:category'
+							element={<Category />}
 						/>
 						<Route
 							path='*'

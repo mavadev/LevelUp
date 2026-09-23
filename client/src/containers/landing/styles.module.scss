@@ -6,7 +6,6 @@
 #landing {
   width: 100%;
   background: $lanFondo;
-
   #slider {
     height: 680px;
     position: relative;
@@ -79,7 +78,6 @@
         }
       }
     }
-
     .prevBtn,
     .nextBtn {
       position: absolute;
@@ -128,125 +126,55 @@
       }
     }
   }
-
   #content {
-    .sectionHeader {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      h2 {
-        font-size: 28px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        span {
-          color: $primary;
-          margin-right: 8px;
-        }
-      }
-      .viewAll {
-        color: $primary;
-        font-size: 18px;
-        font-weight: bold;
-        text-decoration: none;
-        transition: opacity 0.3s ease;
-        &:hover {
-          opacity: 0.8;
-        }
-      }
-    }
-    #genres{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 60px 0px;
+    section{
       width: 100%;
       max-width: 1440px;
       margin: 0 auto;
-      padding: 40px 0;
-      #listGenres {
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        h2 {
+          font-size: 26px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          color: #b3b3b3;
+          span {
+            color: $primary;
+            margin-right: 8px;
+          }
+        }
+        .sectionLink {
+          color: $primary;
+          font-size: 18px;
+          font-weight: bold;
+          text-decoration: none;
+          transition: opacity 0.3s ease;
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+      }
+      .listCategory {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 10px;
-        #genre{
-          width: 200px;
-          display: flex;
-          aspect-ratio: 3/2;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          position: relative;
-          border-radius: 10px;
-          overflow: hidden;
-          #genreImage{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-          }
-          #genreInfo{
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.3);
-            display: grid;
-            place-items: center;
-            #genreName{
-              font-size: 24px;
-            }
-          }
-        }
       }
-    }
-    #games {
-      width: 100%;
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 20px 0px;
       #listGames{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         gap: 10px;
-        #game{
-          width: 200px;
-          aspect-ratio: 3/4;
-          border-radius: 10px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          #gameImage{
-            width: 100%;
-            object-fit: cover;
-            object-position: center;
-            flex: 1;
-          }
-          #gameInfo{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-              background-color: #141414;
-            #gameTitle{
-              font-size: 12px;
-              font-weight: bold;
-            }
-            #gameGenre{
-              font-size: 10px;
-              padding: 4px;
-              border: 1px solid;
-              border-color: $primary;
-              color: $primary;
-              border-radius: 4px;
-            }
-          }
-        }
       }
-    }
-    #platforms {
-      width: 100%;
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 20px 0px;
       #listPlatforms{
         display: flex;
         flex-wrap: wrap;
@@ -255,6 +183,7 @@
           flex: 1;
           height: 400px;
           display: flex;
+          cursor: pointer;
           position: relative;
           transition: flex 0.3s ease;
           &:hover{
@@ -278,59 +207,57 @@
           }
         }
       }
-    }
-    #contact {
-      width: 100%;
-      padding: 40px 0px;
-      .contactContainer {
+      &#contact {
         width: 100%;
-        max-width: 1440px;
-        margin: 0 auto;
-        padding: 50px 40px;
-        border: 1px solid rgba($primary, 0.3);
-        background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        .contactText {
-          max-width: 800px;
-          h2 {
-            font-size: 32px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .contentContact {
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 50px 40px;
+          border: 1px solid rgba($primary, 0.3);
+          background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 30px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+          .textContact {
+            max-width: 800px;
+            h2 {
+              font-size: 32px;
+              font-weight: bold;
+              color: #ffffff;
+              margin-bottom: 12px;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            }
+            p {
+              font-size: 16px;
+              color: #b3b3b3;
+              line-height: 1.5;
+              text-wrap: balance;  
+            }
           }
-          p {
+          .btnContact {
+            display: inline-block;
+            white-space: nowrap;
+            padding: 16px 32px;
             font-size: 16px;
-            color: #b3b3b3;
-            line-height: 1.5;
-            text-wrap: balance;  
-          }
-        }
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0f0f0f;
+            background-color: $primary;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba($primary, 0.2);
 
-        .contactBtn {
-          display: inline-block;
-          white-space: nowrap;
-          padding: 16px 32px;
-          font-size: 16px;
-          font-weight: bold;
-          text-transform: uppercase;
-          color: #0f0f0f;
-          background-color: $primary;
-          border-radius: 6px;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          box-shadow: 0 0 15px rgba($primary, 0.2);
-
-          &:hover {
-            background-color: color.adjust($primary, $lightness: 10%);
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba($primary, 0.5);
+            &:hover {
+              background-color: color.adjust($primary, $lightness: 10%);
+              transform: translateY(-2px);
+              box-shadow: 0 0 25px rgba($primary, 0.5);
+            }
           }
         }
       }

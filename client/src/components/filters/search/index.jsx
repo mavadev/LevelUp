@@ -12,21 +12,15 @@ const Search = ({ isNavbar }) => {
 	const [search, setSearch] = useState('');
 	const [recomend, setRecomend] = useState(false);
 
-	const getGames = title => {
-		dispatch(setHistory(title));
-	};
-
 	const handleSubmitTitle = e => {
 		e.preventDefault();
 		if (search.length) {
-			getGames(search);
 		}
 		setSearch('');
 	};
 
 	const handleClick = e => {
 		const title = e.target.textContent;
-		getGames(title);
 		setSearch(title);
 	};
 

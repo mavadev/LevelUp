@@ -1,45 +1,56 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaStar } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
-import { SpinnerLoader } from '../..';
+import defaultGameCard from '@/assets/default/game_card.png';
 
-const Game = ({ key, id, name, genres, rating, img }) => {
-	const [loaded, setLoaded] = useState(false);
-
+const GameCard = ({ type = 2, game }) => {
 	return (
 		<Link
-			key={key}
-			to={`/juegos/${id}`}
-			className={styles.game}>
-			<img
-				src={img}
-				alt={`game${id}`}
-				className={styles.fondo}
-				onLoad={() => setLoaded(true)}
-			/>
-			{!loaded && (
-				<div id={styles.loadImage}>
-					<SpinnerLoader />
-				</div>
-			)}
-			<div id={styles.info}>
-				<div id={styles.left}>
-					<h3 id={styles.title}>{name}</h3>
-					<div id={styles.genres}>
-						{genres.map((g, i) => (
-							<span key={i}>{g.name || g}</span>
-						))}
+			className={styles.game}
+			to={`/games/${game.slug}`}
+			key={`${game.id}-${game.slug}`}>
+			{type === 1 ? (
+				<>
+					<img
+						alt={game.name}
+						className={styles.image}
+						src={game.background_image}
+					/>
+					<div className={styles.content1}>
+						<p className={styles.title}>{game.name}</p>
+						<h3 className={styles.boxGenre}>{game.genres[0].name}</h3>
 					</div>
-				</div>
-				<div id={styles.rating}>
-					<FaStar className={styles.icon} />
-					<p>{rating}</p>
-				</div>
-			</div>
+				</>
+			) : (
+				<>
+					<img
+						alt={game.name}
+						className={styles.image}
+						src={game.background_image || defaultGameCard}
+						onError={e => {
+							e.target.onerror = null;
+							e.target.src = defaultGameCard;
+						}}
+					/>
+					<div className={styles.content2}>
+						<p className={styles.title}>{game.name}</p>
+						<div className={styles.information}>
+							<div className={styles.genres}>
+								{game.genres?.slice(0, 3).map((genre, index) => (
+									<h3
+										key={index}
+										className={styles.genre}>
+										{genre.name}
+									</h3>
+								))}
+							</div>
+							<p className={styles.rating}>{game.rating}</p>
+						</div>
+					</div>
+				</>
+			)}
 		</Link>
 	);
 };
 
-export default Game;
+export default GameCard;

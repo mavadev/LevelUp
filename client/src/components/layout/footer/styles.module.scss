@@ -14,7 +14,8 @@
       .box{
         gap: 10px;
         margin-right: 120px;
-        @extend %flex-column;
+        display: flex;
+        flex-direction: column;
         &:nth-child(1){
           margin-right: auto;
           #logo{

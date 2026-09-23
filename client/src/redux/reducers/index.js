@@ -1,4 +1,13 @@
-import { GET_TAGS, GET_GENRES, GET_PLATFORMS, GET_GAMES, SET_HISTORY, SET_LOADING_GAMES } from '../actions';
+import {
+	GET_TAGS,
+	GET_GENRES,
+	GET_PLATFORMS,
+	GET_FEATURED_GAMES,
+	GET_FILTERED_GAMES,
+	SET_HISTORY,
+	SET_DROPDOWN,
+	SET_LOADING_GAMES,
+} from '../actions';
 
 const initialState = {
 	genres: [],
@@ -6,10 +15,16 @@ const initialState = {
 	tags: [],
 	history: [],
 
-	filteredGames: [],
+	featuredGames: [],
+	filteredGames: {},
 	loadingGames: false,
-	totalGames: 0,
-	totalPages: 0,
+	dropdownState: {
+		genres: true,
+		platforms: false,
+		tags: false,
+		order: false,
+		creator: false,
+	},
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -26,14 +41,23 @@ export default (state = initialState, { type, payload }) => {
 		case SET_LOADING_GAMES:
 			return { ...state, loadingGames: payload };
 
-		case GET_GAMES:
-			console.log({ payload });
+		case GET_FEATURED_GAMES:
+			return { ...state, featuredGames: payload };
+
+		case GET_FILTERED_GAMES:
 			return {
 				...state,
-				filteredGames: payload.games,
-				totalGames: payload.totalGames,
-				totalPages: payload.totalPages,
+				filteredGames: {
+					games: payload.games,
+					totalGames: payload.totalGames,
+					totalPages: payload.totalPages,
+				},
+				loadingGames: false,
 			};
+
+		case SET_DROPDOWN: {
+			return { ...state, dropdownState: payload };
+		}
 
 		case SET_HISTORY: {
 			const filteredHistory = state.history.filter(item => item !== payload);
