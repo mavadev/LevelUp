@@ -13,7 +13,7 @@ const allowedOrigins = [
 	'http://localhost:8888',
 	'http://192.168.18.4:3000',
 	'http://192.168.18.4:8888',
-	'levelup-mavadev.vercel.app',
+	'https://levelup-mavadev.vercel.app',
 ];
 
 // Configuración con la librería CORS
