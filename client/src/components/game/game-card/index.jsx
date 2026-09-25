@@ -46,7 +46,7 @@ const GameCard = ({ type = 2, game }) => {
 					</p>
 					<div className={styles.information}>
 						<div className={styles.genres}>
-							{game.genres?.slice(0, 3).map((genre, index) => (
+							{game?.genres?.slice(0, 3).map((genre, index) => (
 								<span
 									key={genre.id || index}
 									className={styles.genre}>

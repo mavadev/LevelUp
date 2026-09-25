@@ -22,11 +22,11 @@ const Landing = () => {
 
 	const [currentSlide, setCurrentSlide] = useState(0);
 
-	const sliderGames = useMemo(() => games.slice(5, 10), [games]);
-	const topGenres = useMemo(() => genres.slice(0, 6), [genres]);
-	const topTags = useMemo(() => tags.slice(0, 6), [tags]);
-	const featuredGames = useMemo(() => games.slice(0, 5), [games]);
-	const topPlatforms = useMemo(() => platforms.slice(0, 5), [platforms]);
+	const sliderGames = useMemo(() => games?.slice(5, 10), [games]);
+	const topGenres = useMemo(() => genres?.slice(0, 6), [genres]);
+	const topTags = useMemo(() => tags?.slice(0, 6), [tags]);
+	const featuredGames = useMemo(() => games?.slice(0, 5), [games]);
+	const topPlatforms = useMemo(() => platforms?.slice(0, 5), [platforms]);
 
 	useEffect(() => {
 		if (!sliderGames.length) return;
