@@ -7,19 +7,30 @@ import GenreModel from './models/Genre.js';
 import PlatformModel from './models/Platform.js';
 import TagModel from './models/Tag.js';
 
-const { DB_USER, DB_PASSWORD, DB_HOST, DB, DATABASE_URL, NODE_ENV } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DATABASE_URL, NODE_ENV } = process.env;
 
 // Conexión a PostgreSQL
-let sequelize = !NODE_ENV
-	? new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB}`, {
-			logging: false,
-			native: false,
-		})
-	: new Sequelize(DATABASE_URL, {
-			logging: false,
-			native: false,
-			dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
-		});
+const isProduction = NODE_ENV === 'production';
+
+let sequelize;
+if (DATABASE_URL || isProduction) {
+	sequelize = new Sequelize(DATABASE_URL, {
+		logging: false,
+		native: false,
+		dialectOptions: {
+			ssl: {
+				require: true,
+				rejectUnauthorized: false,
+			},
+		},
+	});
+} else {
+	sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT || 5432}/${DB_NAME}`, {
+		logging: false,
+		native: false,
+	});
+}
+
 // Comprobar conexión
 sequelize
 	.authenticate()
