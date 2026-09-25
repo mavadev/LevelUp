@@ -8,36 +8,41 @@ import './db.js';
 
 const server = express();
 
-// Configuración
-server.use(cors());
+const allowedOrigins = [
+	'http://localhost:3000',
+	'http://localhost:8888',
+	'http://192.168.18.4:3000',
+	'http://192.168.18.4:8888',
+	'https://videogames-app-nu.vercel.app',
+	'https://videogames-app-gianmarcovc.vercel.app',
+	'https://videogames-app-git-master-gianmarcovc.vercel.app',
+];
+
+// Configuración con la librería CORS
+server.use(
+	cors({
+		origin: (origin, callback) => {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(null, true);
+			}
+		},
+		credentials: true,
+		methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+		allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+	}),
+);
+
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
-server.use((req, res, next) => {
-	const allowedOrigins = [
-		'http://localhost:3000',
-		'http://192.168.0.*:3000',
-		'https://videogames-app-nu.vercel.app',
-		'https://videogames-app-gianmarcovc.vercel.app',
-		'https://videogames-app-git-master-gianmarcovc.vercel.app',
-	];
-
-	const { origin } = req.headers;
-	if (allowedOrigins.includes(origin)) {
-		res.header('Access-Control-Allow-Origin', origin);
-	}
-	res.header('Access-Control-Allow-Credentials', 'true');
-	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-
-	next();
-});
 
 // Rutas
 server.use('/api', routes);
 
-server.use((err, req, res, next) => {
+server.use((err, _, res, _) => {
 	const status = err.status || 500;
 	const message = err.message || err;
 	console.error(err);
