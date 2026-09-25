@@ -13,9 +13,7 @@ const allowedOrigins = [
 	'http://localhost:8888',
 	'http://192.168.18.4:3000',
 	'http://192.168.18.4:8888',
-	'https://videogames-app-nu.vercel.app',
-	'https://videogames-app-gianmarcovc.vercel.app',
-	'https://videogames-app-git-master-gianmarcovc.vercel.app',
+	'levelup-mavadev.vercel.app',
 ];
 
 // Configuración con la librería CORS
@@ -25,7 +23,7 @@ server.use(
 			if (!origin || allowedOrigins.includes(origin)) {
 				callback(null, true);
 			} else {
-				callback(null, true);
+				callback(new Error('Bloqueado por políticas de CORS (Origen no permitido)'));
 			}
 		},
 		credentials: true,
