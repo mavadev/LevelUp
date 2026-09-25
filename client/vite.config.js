@@ -14,12 +14,14 @@ export default defineConfig({
 			},
 		},
 	},
-	server: {
-		host: '0.0.0.0',
-		port: 8888,
-		hmr: {
-			host: '192.168.18.4',
-			port: 8888,
+	build: {
+		rollupOptions: {
+			onwarn(warning, warn) {
+				if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+					return;
+				}
+				warn(warning);
+			},
 		},
 	},
 	resolve: {
