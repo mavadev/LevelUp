@@ -1,7 +1,6 @@
 import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-backend-jfkp.onrender.com/api';
-
-axios.defaults.baseURL = import.meta.env.PROD ? '#' : API_URL;
+axios.defaults.baseURL = API_URL;
 
 export const GET_GENRES = 'GET_GENRES';
 export const GET_PLATFORMS = 'GET_PLATFORMS';
