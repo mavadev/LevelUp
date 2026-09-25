@@ -1,225 +1,233 @@
-@use '../../scss/variables.scss';
-@use '../../scss/mixins.scss';
-@use '../../scss/extends.scss';
-
-#loader{
-  width: 100%;
-  height: 100vh;
-  display: grid;
-  place-items: center;
-}
+@use '../../scss/variables.scss' as *;
+@use '../../scss/mixins.scss' as *;
 
 #container {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: calc(100vh - 80px);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-color: $grayDark;
   display: flex;
   flex-direction: column;
-  #information{
+  overflow-x: hidden;
+
+  #information {
     width: 100%;
     flex: 1;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 100px 20px 20px;
-    @include flex($direction: row, $justify: center, $align: center);
-    gap: 20px;
-    #content{
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    #content {
       display: flex;
       flex-direction: column;
       gap: 20px;
       flex: 1;
       max-width: 800px;
-      #title{
-        font-size: 45px;
+      width: 100%;
+      #title {
+        font-size: clamp(28px, 4vw, 45px);
+        line-height: 1.1;
       }
-      #description{
-        overflow: auto;
-        font-size: 17px;
-        line-height: 1.5;
+
+      #description {
+        overflow-y: auto;
+        font-size: 16px;
+        line-height: 1.6;
         font-weight: 500;
         max-height: 250px;
-        color: $whiteLow;
-        &::-webkit-scrollbar{
-          appearance: none;
+        color: $text-light;
+        padding-right: 8px;
+
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($primary-dark, 0.5);
+          border-radius: 4px;
         }
       }
-      #categories{
+
+      #categories {
         display: flex;
         flex-direction: column;
-        gap: 7px 10px;
-        .category{
-          flex: 1;
+        gap: 12px;
+
+        .category {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: space-between;
-          gap: 20px;
+          gap: 15px;
+
           .categoryTitle {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: bold;
             text-transform: uppercase;
             color: $grayLight;
+            min-width: 120px;
           }
-          .categoryList{
+
+          .categoryList {
             display: flex;
-            gap: 15px;
-            .value{
-              font-size: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            .value {
+              font-size: 14px;
               font-weight: bold;
               text-transform: uppercase;
             }
           }
         }
       }
-      #website{
+
+      #website {
         overflow: hidden;
         font-weight: bold;
-        padding: 10px;
+        padding: 12px;
         text-align: center;
-        border-radius: 5px;
+        border-radius: 6px;
         background-color: transparent;
-        border: 1px solid $primaryDark;
-        &:hover{
-          background-color: $primaryDark;
+        border: 1px solid $primary-dark;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+          background-color: $primary-dark;
         }
       }
-    }  
-    #trailerWrapper{
+    }
+
+    #trailerWrapper {
       flex: 1;
-      #trailer{
+      width: 100%;
+
+      #trailer {
         width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
         border-radius: 10px;
+        object-fit: cover;
       }
     }
   }
-  #screenshots{
+
+  #screenshots {
     width: 100%;
     position: relative;
-    padding: 80px 0px;
+    padding: 40px 0;
+
     .iconMove {
       position: absolute;
-      top: 0;
-      height: 100%;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 20;
-      font-size: 40px;
+      font-size: 32px;
       cursor: pointer;
-      padding: 40px 13px !important;
+      padding: 20px 10px;
       display: grid;
       place-items: center;
       border: none;
-      background: none;
-      &.left{
-        left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.8);
       }
-      &.right{
-        right: 0;
+
+      &.left {
+        left: 10px;
+      }
+      &.right {
+        right: 10px;
       }
     }
-    .carrusel{
+
+    .carrusel {
       width: max-content;
       max-width: 1440px;
       margin: 0 auto;
       display: flex;
-      gap: 25px;
-      padding: 0px 20px;
-      transition: transform .7s ease-out;
-      .screen{
-        width: 250px;
+      gap: 20px;
+      padding: 0 40px;
+      transition: transform 0.5s ease-out;
+
+      .screen {
+        width: 260px;
+        height: 150px;
+        object-fit: cover;
         cursor: pointer;
-        border-radius: 5px;
+        border-radius: 6px;
         filter: contrast(90%);
-        transition: filter .15s ease-in-out;
-        &:hover{
+        transition: filter 0.2s ease, transform 0.2s ease;
+
+        &:hover {
           filter: contrast(100%);
+          transform: scale(1.03);
         }
       }
     }
   }
 }
 
-@media screen and (max-width:1190px) {
-  #detailGame section#infoVideoGame #info{
-    width: 50%;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  #detailGame{
-    gap: 30px;
-    height: max-content;
-    padding: 80px 0px 20px;
-    section{
-      &#infoVideoGame{
-        gap: 30px;
-        height: max-content;
-        flex-direction: column;
-        #info, #trailer{
-          width: 100%;
-        }
-        #info{
-          padding: 0px 40px;
-          #title{
-            font-size: 35px;
-          }
-          #website{
-            font-size: 18px;
-            line-height: 1.2;
-          }
-          #atributes{
-            padding: 30px 0px;
-            background: $black;
-            justify-content: center;
-            div{
-              span{
-                color: $whiteLow
-              }
-              &:not(:last-child)::after{
-                all: unset;
-              }
+@include tablet {
+  #container {
+    #information {
+      flex-direction: column-reverse; 
+      padding: 40px 20px;
+      gap: 30px;
+      #content {
+        max-width: 100%;
+        #categories {
+          .category {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            .categoryTitle {
+              min-width: auto;
             }
-          }  
-          #desc{
-            max-height: max-content;
-            text-align: justify;
-            color: $whiteLow;
-          }
-          #infoExtra{
-            justify-content: space-evenly;
-          }  
-        }
-        #trailer{
-          border-radius: 0;
-        }
-      }
-      &#screenshots #carrusel{
-        padding-left: 40px;
-        .iconMove{
-          &.left{
-            left: 0px;
-          }
-          &.right{
-            right: 0px;
+            .categoryList .value{
+              line-height: 1.5;
+            }
           }
         }
       }
+      #trailerWrapper {
+        max-width: 100%;
+        #trailer {
+          border-radius: 8px;
+        }
+      }
     }
-  }
-}
-
-@media screen and (max-width: 480px) {
-  #detailGame section#screenshots #carrusel{
-    padding-left: 0px;
-    .iconMove{
-      visibility: hidden;
-    }
-    #images{
-      flex-direction: column;
-      .screen{
-        width: 90%;
-        margin: 0 auto;
+    #screenshots {
+      padding: 20px 0;
+      .iconMove {
+        display: none; 
+      }
+      .carrusel {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 0 15px 15px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .screen {
+          width: 80vw;
+          height: auto;
+          aspect-ratio: 16 / 9;
+          flex-shrink: 0;
+          scroll-snap-align: center;
+        }
       }
     }
   }

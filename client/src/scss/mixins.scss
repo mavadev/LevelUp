@@ -1,7 +1,29 @@
-@mixin flex($direction, $justify, $align){
-  display: flex;
-  align-items: $align;
-  justify-content: $justify;
-  flex-direction: $direction;
-}
+@use './variables' as *;
 
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin hover-glow($color: $primary) {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba($color, 0.4);
+  }
+}
+@mixin pc {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+@mixin mobile {
+  @media (max-width: 480px) {
+    @content;
+  }
+}

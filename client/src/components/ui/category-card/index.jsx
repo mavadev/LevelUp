@@ -18,7 +18,6 @@ const CategoryCard = ({ type, category }) => {
 
 	return (
 		<div
-			key={category.slug}
 			onClick={handleClick}
 			className={styles.item}>
 			<img

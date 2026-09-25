@@ -1,12 +1,12 @@
+import { FaTrash } from 'react-icons/fa';
 import { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
 import usePostGame from '../../hooks/usePostGame';
-import defaultCard from '../../assets/default/game_card.png';
+import { defaultGameCard } from '../../assets';
 import { getGenres, getPlatforms, getTags } from '../../redux/actions';
-import { FaTrash } from 'react-icons/fa';
 
 const PostGame = () => {
 	const dispatch = useDispatch();
@@ -20,24 +20,22 @@ const PostGame = () => {
 		if (!tags.length) dispatch(getTags());
 	}, [dispatch, genres, platforms, tags]);
 
-	const stars = useRef(null);
-	const ratingValue = useRef(null);
+	const starsRef = useRef(null);
 
 	const handleChangeRating = e => {
-		const rect = stars.current.getBoundingClientRect();
-		const pct = (e.clientX - rect.left) / rect.width;
-		const rating = Math.round(pct * 5 * 10) / 10;
+		if (!starsRef.current) return;
 
+		const rect = starsRef.current.getBoundingClientRect();
+		const pct = (e.clientX - rect.left) / rect.width;
+		const rating = (Math.round(pct * 5 * 10) / 10).toFixed(1);
 		const pctFill = ((rating / 5) * 100).toFixed(0);
 
-		stars.current.style.color = 'transparent';
-		stars.current.style.background = `linear-gradient(90deg, #2cc1a1 ${pctFill}%, #8c8c8c ${pctFill}%)`;
-		stars.current.style.backgroundClip = 'text';
-		stars.current.style.webkitBackgroundClip = 'text';
+		starsRef.current.style.color = 'transparent';
+		starsRef.current.style.background = `linear-gradient(90deg, #2cc1a1 ${pctFill}%, #8c8c8c ${pctFill}%)`;
+		starsRef.current.style.backgroundClip = 'text';
+		starsRef.current.style.webkitBackgroundClip = 'text';
 
-		const value = rating.toFixed(1);
-		ratingValue.current.textContent = value;
-		handleRatingChange(value);
+		handleRatingChange(rating);
 	};
 
 	return (
@@ -50,18 +48,11 @@ const PostGame = () => {
 				<main id={styles.content}>
 					{/* Preview del juego */}
 					<div id={styles.createImage}>
-						{game.image ? (
-							<div
-								className={styles.previewBg}
-								style={{ backgroundImage: `url(${game.image})` }}
-							/>
-						) : (
-							<div
-								className={styles.previewBg}
-								style={{ backgroundImage: `url(${defaultCard})` }}>
-								<p>Pega una URL de tu portada para ver el preview de tu juego aquí</p>
-							</div>
-						)}
+						<div
+							className={styles.previewBg}
+							style={{ backgroundImage: `url(${game.image || defaultGameCard})` }}>
+							{!game.image && <p>Pega una URL de tu portada para ver el preview de tu juego aquí</p>}
+						</div>
 
 						<div className={styles.previewOverlay}>
 							<span className={styles.previewTag}>Vista previa</span>
@@ -131,7 +122,7 @@ const PostGame = () => {
 									Descripción
 								</label>
 								<textarea
-									id={styles.inputDescription}
+									id='description'
 									name='description'
 									value={game.description}
 									onChange={handleInputChange}
@@ -170,28 +161,25 @@ const PostGame = () => {
 									Rating
 								</label>
 								<input
+									id='rating'
+									name='rating'
+									type='number'
 									min={0}
 									max={5}
 									step={0.1}
-									name='rating'
-									type='number'
 									value={game.rating}
-									id={styles.inputRating}
+									className={styles.inputRating}
 									onChange={handleInputChange}
 									placeholder='0.0 - 5.0'
 								/>
 								<div className={styles.boxRating}>
 									<div
-										ref={stars}
+										ref={starsRef}
 										className={styles.stars}
 										onClick={handleChangeRating}>
 										★★★★★
 									</div>
-									<span
-										ref={ratingValue}
-										className={styles.ratingValue}>
-										0.0
-									</span>
+									<span className={styles.ratingValue}>{game.rating ? Number(game.rating).toFixed(1) : '0.0'}</span>
 								</div>
 							</div>
 							{errors.rating && <span className={styles.error}>{errors.rating}</span>}
@@ -210,6 +198,7 @@ const PostGame = () => {
 												type='checkbox'
 												name='genres'
 												value={genre.id}
+												checked={game.genres.includes(`${genre.id}`)}
 												onChange={handleInputChange}
 											/>
 											{genre.name}
@@ -233,6 +222,7 @@ const PostGame = () => {
 												type='checkbox'
 												name='platforms'
 												value={platform.id}
+												checked={game.platforms.includes(`${platform.id}`)}
 												onChange={handleInputChange}
 											/>
 											{platform.name}
@@ -256,6 +246,7 @@ const PostGame = () => {
 												type='checkbox'
 												name='tags'
 												value={tag.id}
+												checked={game.tags.includes(`${tag.id}`)}
 												onChange={handleInputChange}
 											/>
 											{tag.name}
@@ -290,7 +281,8 @@ const PostGame = () => {
 							<button
 								type='button'
 								id={styles.btnReset}
-								onClick={handleResetForm}>
+								onClick={handleResetForm}
+								title='Limpiar formulario'>
 								<FaTrash />
 							</button>
 							<input

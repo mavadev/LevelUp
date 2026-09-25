@@ -1,76 +1,121 @@
-@use '../../../scss/mixins.scss';
-@use '../../../scss/extends.scss';
-@use '../../../scss/variables.scss';
+@use '../../../scss/variables' as *;
+@use '../../../scss/mixins' as *;
 
-.game{
-  width: 250px;
-  aspect-ratio: 3/5;
-  border-radius: 3px;
+.game {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 3/5; 
+  background-color: #141414;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  &:hover{
-    box-shadow: 0 0 20px rgba($primary, 0.3);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba($primary, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba($primary, 0.2);
+    .image {
+      transform: scale(1.05);
+    }
   }
-  .image{
-    width: 100%;
+  .imageContainer {
     height: 100%;
-    object-fit: cover;
-    object-position: center;
+    overflow: hidden;
+    position: relative;
+    background-color: #0a0a0a;
+    .image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.4s ease;
+    }
   }
-  .content1{
+  .content1 {
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: space-between;
-    padding: 10px;
-    .title{
-      font-size: 18px;
-      font-weight: bold;
+    padding: 12px 15px;
+
+    .title {
+      font-size: 16px;
+      font-weight: 700;
+      color: $text-light;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      margin: 0;
     }
-    .boxGenre{
-      font-size: 10px;
-      padding: 4px;
-      border: 1px solid;
-      border-color: $primary;
+
+    .boxGenre {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border: 1px solid $primary;
       color: $primary;
       border-radius: 4px;
+      white-space: nowrap;
+      text-transform: uppercase;
     }
   }
-  .content2{
+  .content2 {
     padding: 15px;
-    background-color: #141414;
     display: flex;
-    gap: 15px;
+    gap: 12px;
     flex-direction: column;
     justify-content: space-between;
-    .title{
+    flex-grow: 1;
+
+    .title {
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 700;
+      color: $text-light;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      margin: 0;
     }
-    .information{
+
+    .information {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      .genres{
+      gap: 10px;
+      .genres {
+        flex: 1;
         display: flex;
-        gap: 10px;
-        .genre{
+        flex-wrap: nowrap;
+        gap: 6px;
+        overflow: hidden;
+        .genre {
           font-size: 12px;
-          color: $grayLight;
+          color: $text-muted;
+          &:not(:last-child)::after {
+            content: '•';
+            margin-left: 6px;
+            color: rgba(255, 255, 255, 0.2);
+          }
         }
       }
-      .rating{
-        font-size: 14px;
-        font-weight: bold;
+      .rating {
+        font-size: 13px;
+        font-weight: 700;
         color: $primary;
+        background: rgba($primary, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        white-space: nowrap;
       }
     }
+  }
+}
+
+@include tablet {
+  .game {
+    aspect-ratio: 1/1;
   }
 }

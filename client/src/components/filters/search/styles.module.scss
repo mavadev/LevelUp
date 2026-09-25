@@ -1,49 +1,39 @@
-@use '../../../scss/variables.scss';
-@use '../../../scss/mixins.scss';
-@use '../../../scss/extends.scss';
-
-.search{
+.search {
   position: relative;
-  #inputSearch{
-    border: none;
-    outline: none;
-    color: $black;
-    padding: 7px 15px;
-    border-radius: 6px;
-  }
-  #history{
-    top: 100%;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  .searchIcon {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    background: $grayDark;
-    border-radius: 0px 0px 5px 5px;
-    &.hide{
-      animation: hide .3s ease-in-out forwards;
-      @keyframes hide {
-        to { 
-          height: 0px;
-          overflow: hidden;
-        }
-      }
+    left: 14px;
+    color: #888888;
+  }
+  .searchInput {
+    width: 280px;
+    padding: 10px 14px 10px 40px;
+    background-color: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    &:focus {
+      border-color: $primary;
     }
-    #item{
-      gap: 10px;
-      padding: 10px;
-      cursor: pointer;
-      font-size: 13px;
-      @include flex($direction: row, $justify: flex-start, $align: center);
-      &:hover{
-        background: $gray;
-      }
-    }
+  }
+  .clearIcon {
+    position: absolute;
+    right: 14px;
+    color: #4d4d4d;
+    cursor: pointer;
   }
 }
-@media screen and (max-width: 768px){
-  .search.isNavbar{
-    display: none;
+
+@include tablet {
+  .search {
+    flex: 1;
+    .searchInput {
+      width: 100%;
+    }
   }
 }

@@ -1,60 +1,72 @@
+import { useState } from 'react';
+import { FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaGamepad, FaUserAlt } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
 import { LogoColor } from '../../../assets';
 
 const Navbar = () => {
+	const [isOpen, setIsOpen] = useState(false);
 	const location = useLocation().pathname;
 
 	const navLinks = [
 		{
 			name: 'Inicio',
 			ruta: '/',
-			icon: <FaHome />,
 		},
 		{
 			name: 'Juegos',
 			ruta: '/games',
-			icon: <FaGamepad />,
 		},
 		{
 			name: 'Nosotros',
 			ruta: '/about',
-			icon: <FaUserAlt />,
 		},
 	];
 
+	const toggleMenu = () => setIsOpen(!isOpen);
+	const closeMenu = () => setIsOpen(false);
+
 	return (
-		<>
-			{/* Navbar */}
-			<div id={styles.container}>
-				<nav id={styles.navbar}>
-					<Link to='/'>
-						<img
-							alt='Level Up'
-							src={LogoColor}
-							id={styles.logo}
-						/>
+		<div id={styles.container}>
+			<nav id={styles.navbar}>
+				<Link
+					to='/'
+					onClick={closeMenu}>
+					<img
+						alt='Level Up'
+						src={LogoColor}
+						id={styles.logo}
+					/>
+				</Link>
+
+				<button
+					type='button'
+					className={styles.hamburger}
+					onClick={toggleMenu}
+					aria-label='Toggle navigation'>
+					{isOpen ? <FaTimes /> : <FaBars />}
+				</button>
+
+				<ul className={`${styles.navigation} ${isOpen ? styles.open : ''}`}>
+					{navLinks.map((option, index) => (
+						<Link
+							key={index}
+							to={option.ruta}
+							onClick={closeMenu}
+							className={`${styles.option} ${location === option.ruta ? styles.active : styles.desactive}`}>
+							{option.name}
+						</Link>
+					))}
+					<Link
+						id={styles.btnCrear}
+						to='/post-game'
+						onClick={closeMenu}>
+						Publicar Juego
 					</Link>
-					<ul id={styles.navigation}>
-						{navLinks.map((option, index) => (
-							<Link
-								key={index}
-								to={option.ruta}
-								className={`${styles.option} ${location === option.ruta ? styles.active : styles.desactive}`}>
-								{option.name}
-							</Link>
-						))}
-						<a
-							id={styles.btnCrear}
-							href='/post-game'>
-							Publicar Juego
-						</a>
-					</ul>
-				</nav>
-			</div>
-		</>
+				</ul>
+			</nav>
+		</div>
 	);
 };
 

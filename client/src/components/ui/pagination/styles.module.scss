@@ -29,9 +29,9 @@
       place-items: center;
       transition: all 0.2s ease;
       &.active {
-        background-color: $primaryDark;
+        background-color: $primary-dark;
         color: #ffffff;
-        box-shadow: 0 0 10px rgba($primaryDark, 0.5);
+        box-shadow: 0 0 10px rgba($primary-dark, 0.5);
       }
       &.desactive {
         &:hover {

@@ -6,7 +6,6 @@ axios.defaults.baseURL = import.meta.env.PROD ? '#' : API_URL;
 export const GET_GENRES = 'GET_GENRES';
 export const GET_PLATFORMS = 'GET_PLATFORMS';
 export const GET_TAGS = 'GET_TAGS';
-export const SET_HISTORY = 'SET_HISTORY';
 export const SET_DROPDOWN = 'SET_DROPDOWN';
 
 export const GET_FEATURED_GAMES = 'GET_FEATURED_GAMES';
@@ -73,9 +72,6 @@ export const getFilteredGames =
 	};
 
 export const setOpenDropdowns = dropdown => ({ type: SET_DROPDOWN, payload: dropdown });
-
-// Agregar a la historia
-export const setHistory = value => ({ type: SET_HISTORY, payload: value });
 
 // Publicar un juego
 export const postGame = game => {

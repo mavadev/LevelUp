@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
+import toast from 'react-hot-toast';
 const API_URL = import.meta.env.VITE_API_URL;
 
 const ITEM_WIDTH = 275;
@@ -23,8 +24,7 @@ const useDetailGame = slugGame => {
 			.catch(error => {
 				const message = error.response.data.message || error.message;
 				setError(message);
-
-				console.log(`Hubo un error al obtener el juego: ` + message);
+				toast.error(message);
 			})
 			.finally(() => {
 				setLoading(false);

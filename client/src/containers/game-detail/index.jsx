@@ -3,7 +3,7 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import styles from './styles.module.scss';
-import { GameImage } from '../../components';
+import { GameErrorDetail, GameImage, GameLoadingDetail } from '../../components';
 import useDetailGame from '../../hooks/useDetailGame';
 
 const GameDetail = () => {
@@ -38,19 +38,11 @@ const GameDetail = () => {
 	];
 
 	if (loading) {
-		return (
-			<main id={styles.loader}>
-				<h1>Obteniendo el juego...</h1>
-			</main>
-		);
+		return <GameLoadingDetail />;
 	}
 
 	if (error) {
-		return (
-			<main id={styles.error}>
-				<h1>Error: {error}</h1>
-			</main>
-		);
+		return <GameErrorDetail error={error} />;
 	}
 
 	const formatDate = prevDate => {

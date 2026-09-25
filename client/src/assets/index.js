@@ -1,3 +1,4 @@
-export { default as GameImageLoader } from './loaders/detail.gif';
-export { default as LogoWhite } from './Logo/white.svg';
-export { default as LogoColor } from './Logo/color.svg';
+export { default as defaultGameCard } from './default/game_card.png';
+
+export { default as LogoWhite } from './logo/white.svg';
+export { default as LogoColor } from './logo/color.svg';

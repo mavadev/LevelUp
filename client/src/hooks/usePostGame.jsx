@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import { postGame } from '../redux/actions';
@@ -63,8 +64,6 @@ const usePostGame = () => {
 
 		// Si hay errores se muestra y no se envía nada
 		if (hasErrors) {
-			console.log('ERRORES');
-
 			setErrors(validationErrors);
 			setIsLoading(false);
 			return;
@@ -80,9 +79,12 @@ const usePostGame = () => {
 			// Redirection a ver el juego creado
 			if (createdSlug) {
 				navigate(`/games/${createdSlug}`);
+				toast.success('¡Juego publicado con éxito!');
 			}
 		} catch (err) {
-			setErrors({ system: err.results?.data?.message || err.message });
+			const message = err.results?.data?.message || err.message;
+			setErrors({ system: message });
+			toast.error(message);
 		} finally {
 			setIsLoading(false);
 		}

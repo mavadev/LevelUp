@@ -1,0 +1,38 @@
+.skeletonInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 0;
+  .skeletonBox {
+    width: 18px;
+    height: 18px;
+    background-color: #242424;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  .skeletonText {
+    height: 14px;
+    width: 60%;
+    background-color: #242424;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  &:nth-child(2n) .skeletonText {
+    width: 75%;
+  }
+  &:nth-child(3n) .skeletonText {
+    width: 45%;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #1f1f1f;
+  }
+  50% {
+    background-color: #2e2e2e;
+  }
+  100% {
+    background-color: #1f1f1f;
+  }
+}

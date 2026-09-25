@@ -1,34 +1,59 @@
-@use '../../scss/variables.scss';
-@use '../../scss/mixins.scss';
-@use '../../scss/extends.scss';
-@use "sass:color";
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
 
 #container {
   width: 100%;
-  height: max-content;
   min-height: 100vh;
-  padding: 120px 20px;
+  padding: 60px 20px;
   max-width: 1440px;
   margin: 0 auto;
-  header{
-    margin-bottom: 30px;
-    .subtitle{
-      color: #efefef;
-      font-size: 16px;
+  header {
+    margin-bottom: 35px;
+    border-left: 4px solid $primary;
+    padding-left: 15px;
+    .subtitle {
+      color: $text-muted;
+      font-size: 14px;
+      font-weight: 600;
       text-transform: uppercase;
-      margin-bottom: 5px;
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
     }
-    .title{
-      font-size: 36px;
+    .title {
+      font-size: 38px;
       color: $primary;
-      font-weight: bolder;
+      font-weight: 800;
       text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1;
     }
   }
   .listItems {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
+    width: 100%;
+  }
+  .empty {
+    color: $text-muted;
+    font-size: 16px;
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #container {
+    padding: 30px 15px 40px;
+    header {
+      margin-bottom: 25px;
+      .subtitle {
+        font-size: 12px;
+      }
+      .title {
+        font-size: 28px;
+      }
+    }
   }
 }

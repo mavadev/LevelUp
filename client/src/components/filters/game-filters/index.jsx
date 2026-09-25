@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FaTimes, FaCheck } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import styles from './styles.module.scss';
-import { Dropdown } from '../../../components';
+import { Dropdown, InputGroupSkeleton } from '../../../components';
 import { getGenres, getPlatforms, getTags, setOpenDropdowns } from '../../../redux/actions';
 
 const InputGroup = ({ id, name, checked, disabled = false, onChange, type = 'checkbox' }) => (
@@ -26,7 +26,7 @@ const InputGroup = ({ id, name, checked, disabled = false, onChange, type = 'che
 	</div>
 );
 
-const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
+const GameFilters = ({ filters, handleChange, onReset, onClose, isOpen }) => {
 	const dispatch = useDispatch();
 	const { genres, platforms, tags, dropdownState } = useSelector(state => state);
 
@@ -35,6 +35,9 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 		if (!platforms.length) dispatch(getPlatforms());
 		if (!tags.length) dispatch(getTags());
 	}, [dispatch, genres, platforms, tags]);
+
+	const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
+	const shouldRender = isDesktop || isOpen;
 
 	const changeDropdownState = dropdown => {
 		dispatch(setOpenDropdowns(dropdown));
@@ -71,8 +74,8 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 	};
 
 	return (
-		<>
-			<AnimatePresence>
+		<AnimatePresence>
+			{shouldRender && (
 				<motion.aside
 					className={styles.filtersWrapper}
 					initial={{ opacity: 0, x: -20 }}
@@ -82,12 +85,12 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 					<div className={styles.filterHeader}>
 						<h4>Filtros</h4>
 						<button
+							type='button'
 							className={styles.closeBtn}
 							onClick={onClose}>
 							<FaTimes />
 						</button>
 					</div>
-
 					<form
 						className={styles.formFilter}
 						onSubmit={e => e.preventDefault()}>
@@ -98,15 +101,19 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 							drop={dropdownState}
 							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
-								{genres.map(genre => (
-									<InputGroup
-										name={genre.name}
-										id={`genre-${genre.slug}`}
-										key={genre.id || genre.slug}
-										onChange={() => handleGenreChange(`${genre.id}`)}
-										checked={filters.genres.includes(`${genre.id}`)}
-									/>
-								))}
+								{!genres.length ? (
+									<InputGroupSkeleton count={5} />
+								) : (
+									genres.map(genre => (
+										<InputGroup
+											name={genre.name}
+											id={`genre-${genre.slug}`}
+											key={genre.id || genre.slug}
+											onChange={() => handleGenreChange(`${genre.id}`)}
+											checked={filters.genres.includes(`${genre.id}`)}
+										/>
+									))
+								)}
 							</div>
 						</Dropdown>
 
@@ -117,15 +124,19 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 							drop={dropdownState}
 							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
-								{tags.map(tag => (
-									<InputGroup
-										name={tag.name}
-										id={`tag-${tag.slug}`}
-										key={tag.id || tag.slug}
-										onChange={() => handleTagChange(`${tag.id}`)}
-										checked={filters.tags.includes(`${tag.id}`)}
-									/>
-								))}
+								{!tags.length ? (
+									<InputGroupSkeleton count={5} />
+								) : (
+									tags.map(tag => (
+										<InputGroup
+											name={tag.name}
+											id={`tag-${tag.slug}`}
+											key={tag.id || tag.slug}
+											onChange={() => handleTagChange(`${tag.id}`)}
+											checked={filters.tags.includes(`${tag.id}`)}
+										/>
+									))
+								)}
 							</div>
 						</Dropdown>
 
@@ -136,15 +147,19 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 							drop={dropdownState}
 							setDrop={changeDropdownState}>
 							<div className={styles.optionsList}>
-								{platforms.map(platform => (
-									<InputGroup
-										name={platform.name}
-										id={`platform-${platform.slug}`}
-										key={platform.id || platform.slug}
-										onChange={() => handlePlatformChange(`${platform.id}`)}
-										checked={filters.platforms.includes(`${platform.id}`)}
-									/>
-								))}
+								{!platforms.length ? (
+									<InputGroupSkeleton count={5} />
+								) : (
+									platforms.map(platform => (
+										<InputGroup
+											name={platform.name}
+											id={`platform-${platform.slug}`}
+											key={platform.id || platform.slug}
+											onChange={() => handlePlatformChange(`${platform.id}`)}
+											checked={filters.platforms.includes(`${platform.id}`)}
+										/>
+									))
+								)}
 							</div>
 						</Dropdown>
 
@@ -212,14 +227,14 @@ const GameFilters = ({ filters, handleChange, onReset, onClose }) => {
 
 						<button
 							type='button'
-							className={styles.resetBtn}
+							className={styles.btnReset}
 							onClick={onReset}>
 							Limpiar Selección
 						</button>
 					</form>
 				</motion.aside>
-			</AnimatePresence>
-		</>
+			)}
+		</AnimatePresence>
 	);
 };
 

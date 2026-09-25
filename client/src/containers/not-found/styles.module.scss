@@ -1,28 +1,150 @@
-@use '../../scss/mixins.scss';
+@use '../../scss/variables' as *;
+@use '../../scss/mixins' as *;
 
-#notFound{
-  position: absolute;
-  inset: 0;
-  font-size: 25px;
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  background-color: $bg-dark;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  @include flex($direction: column, $justify: center, $align: center);
-  gap: 30px;
-  #desc{
-    max-width: 500px;
+  max-width: 580px;
+  width: 100%;
+}
+
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba($primary, 0.25) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  filter: blur(40px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.errorCodeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: clamp(6rem, 15vw, 10rem);
+  font-weight: 900;
+  line-height: 1;
+  color: $text-light;
+  user-select: none;
+
+  .glitchText {
+    background: linear-gradient(135deg, $text-light 0%, $text-muted 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
   }
-  #links{
-    @include flex($direction: row, $justify: center, $align: center);
-    gap: 30px;
-    margin-top: 20px;
-    .link{
-      cursor: pointer;
-      font-weight: bold;
+
+  .iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary;
+    filter: drop-shadow(0 0 15px rgba($primary, 0.6));
+  }
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  color: $text-light;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: $text-muted;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.6rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .primaryBtn {
+    background-color: $primary;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken($primary, 8%);
+      box-shadow: 0 0 15px rgba($primary, 0.4);
+    }
+  }
+
+  .secondaryBtn {
+    background-color: $bg-card;
+    color: $text-light;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background-color: lighten($bg-card, 5%);
+      border-color: rgba($primary, 0.3);
     }
   }
 }
-@media screen and (max-width:768px) {
-  #notFound{
-    font-size: 20px;
-    gap: 20px;
+
+@media screen and (max-width: 576px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
   }
 }

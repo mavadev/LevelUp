@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { FaFilter } from 'react-icons/fa';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
-import { FaFilter, FaSearch, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import styles from './styles.module.scss';
 import { getFilteredGames } from '../../redux/actions';
-import { GameFilters, GameGrid, Pagination } from '../../components';
+import { GameFilters, GameGrid, Pagination, Search } from '../../components';
 
 const Games = () => {
-	const [searchParams, setSearchParams] = useSearchParams();
 	const dispatch = useDispatch();
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	// Estado local para el valor del input de búsqueda en tiempo real
 	const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -129,22 +129,12 @@ const Games = () => {
 								<span>Filtros</span>
 							</button>
 
-							<div className={styles.search}>
-								<FaSearch className={styles.searchIcon} />
-								<input
-									type='text'
-									value={searchTerm}
-									className={styles.searchInput}
-									placeholder='Buscar juegos...'
-									onChange={handleSearchChange}
-								/>
-								{filters.search && (
-									<FaTimes
-										onClick={clearSearch}
-										className={styles.clearIcon}
-									/>
-								)}
-							</div>
+							<Search
+								search={searchTerm}
+								hasValue={filters.search}
+								clearSearch={clearSearch}
+								handleSearchChange={handleSearchChange}
+							/>
 						</div>
 					</header>
 
@@ -154,24 +144,21 @@ const Games = () => {
 								filters={filters}
 								handleChange={updateParams}
 								onReset={handleResetAll}
+								isOpen={showMobileFilters}
 								onClose={() => setShowMobileFilters(false)}
 							/>
 						</aside>
 						<section id={styles.sectionGames}>
-							{loadingGames ? (
-								<>
-									<h1>Cargando los juegos</h1>
-								</>
-							) : (
-								<>
-									<GameGrid listGames={filteredGames.games} />
-									<Pagination
-										totalPages={filteredGames.totalPages}
-										currentPage={filters.page}
-										handlePageChange={handlePageChange}
-									/>
-								</>
-							)}
+							<GameGrid
+								listGames={filteredGames.games}
+								loadingGames={loadingGames}
+								onReset={handleResetAll}
+							/>
+							<Pagination
+								totalPages={filteredGames.totalPages}
+								currentPage={filters.page}
+								handlePageChange={handlePageChange}
+							/>
 						</section>
 					</div>
 				</div>

@@ -4,7 +4,6 @@ import {
 	GET_PLATFORMS,
 	GET_FEATURED_GAMES,
 	GET_FILTERED_GAMES,
-	SET_HISTORY,
 	SET_DROPDOWN,
 	SET_LOADING_GAMES,
 } from '../actions';
@@ -57,11 +56,6 @@ export default (state = initialState, { type, payload }) => {
 
 		case SET_DROPDOWN: {
 			return { ...state, dropdownState: payload };
-		}
-
-		case SET_HISTORY: {
-			const filteredHistory = state.history.filter(item => item !== payload);
-			return { ...state, history: [payload, ...filteredHistory] };
 		}
 
 		default:

@@ -1,36 +1,53 @@
-import { Link } from 'react-router-dom';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FaHome, FaGamepad, FaArrowLeft } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
 
-const NotFound = ({ isGame = true }) => (
-	<>
-		<HelmetProvider>
-			<Helmet>
-				<title>Level Up | Page Not Found</title>
-			</Helmet>
-		</HelmetProvider>
-		<div id={styles.notFound}>
-			<h1 id={styles.title}>{isGame ? 'Juego no encontrado' : 404}</h1>
-			<p id={styles.desc}>
-				{isGame
-					? 'Es posible que el identificador del juego esté mal escrito o que el juego ya no exista'
-					: 'No esperabamos esta visita, estas opciones podrían ayudarte'}
-			</p>
-			<div id={styles.links}>
-				<a
-					className={styles.link}
-					onClick={() => history.back()}>
-					Regresar
-				</a>
-				<Link
-					to='/create'
-					className={styles.link}>
-					Crear Juego
-				</Link>
-			</div>
-		</div>
-	</>
-);
+const NotFound = () => {
+	const navigate = useNavigate();
+
+	return (
+		<section className={styles.container}>
+			<motion.div
+				className={styles.content}
+				initial={{ opacity: 0, scale: 0.9 }}
+				animate={{ opacity: 1, scale: 1 }}
+				transition={{ duration: 0.4, ease: 'easeOut' }}>
+				<div className={styles.glow} />
+
+				<div className={styles.errorCodeContainer}>
+					<span className={styles.glitchText}>4</span>
+					<motion.div
+						className={styles.iconWrapper}
+						animate={{ rotate: [0, -10, 10, -10, 0] }}
+						transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}>
+						<FaGamepad className={styles.gamepadIcon} />
+					</motion.div>
+					<span className={styles.glitchText}>4</span>
+				</div>
+
+				<h1 className={styles.title}>¡GAME OVER!</h1>
+				<p className={styles.subtitle}>
+					Parece que te has salido del mapa. La página o el juego que buscas no existe o fue movido a otra dimensión.
+				</p>
+
+				<div className={styles.actions}>
+					<button
+						className={styles.secondaryBtn}
+						onClick={() => navigate(-1)}>
+						<FaArrowLeft /> Regresar
+					</button>
+
+					<button
+						className={styles.primaryBtn}
+						onClick={() => navigate('/games')}>
+						<FaHome /> Volver al Catálogo
+					</button>
+				</div>
+			</motion.div>
+		</section>
+	);
+};
 
 export default NotFound;

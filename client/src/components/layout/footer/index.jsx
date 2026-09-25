@@ -17,6 +17,7 @@ const Footer = () => (
 					</Link>
 					<p id={styles.desc}>Creamos posibilidades para el mundo conectado.</p>
 				</article>
+
 				<article className={styles.box}>
 					<p className={styles.title}>Explorar</p>
 					<Link
@@ -40,8 +41,9 @@ const Footer = () => (
 						Nosotros
 					</Link>
 				</article>
+
 				<article className={styles.box}>
-					<p className={styles.title}>Sigueme</p>
+					<p className={styles.title}>Sígueme</p>
 					<a
 						target='_blank'
 						className={styles.link}
@@ -54,12 +56,15 @@ const Footer = () => (
 						className={styles.link}
 						rel='noopener noreferrer'
 						href='https://www.linkedin.com/in/gianmarco-valentin/'>
-						Linkedin
+						LinkedIn
 					</a>
 				</article>
 			</div>
+
+			<div id={styles.divider} />
+
 			<p id={styles.copyr}>
-				&#0169; 2026 Desarrollador por <span>Mavadev</span>
+				&#0169; 2026 Desarrollado por <span>Mavadev</span>
 			</p>
 		</section>
 	</footer>

@@ -1,23 +1,33 @@
 @use '../../../scss/variables.scss';
 @use '../../../scss/mixins.scss';
-@use '../../../scss/extends.scss';
 
-.dropdown{
-  .header{
-    padding: 10px 0px;
+.dropdown {
+  .header {
+    padding: 10px 0;
     cursor: pointer;
-    @include flex($direction: row, $justify: space-between, $align: center);
-    .text{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .text {
       font-size: 16px;
       font-weight: bold;
     }
-    .icon{
-      transition: all .3s ease;
+    .icon {
+      display: block;
+      font-size: 14px;
+      color: #888888;
+    }
+    &:hover .icon {
+      color: #ffffff;
     }
   }
-  .drop{
+  .dropContainer {
+    overflow: hidden;
+  }
+  .dropContent {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding-bottom: 12px;
   }
 }

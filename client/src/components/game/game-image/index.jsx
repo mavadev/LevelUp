@@ -15,7 +15,7 @@ const GameImage = ({ srcImage, imgSelect, setImage, moveCarrusel, iconsMove }) =
 			}}
 			onMouseOut={() => {
 				document.onclick = () => {
-					setImage ? setImage({ ...imgSelect, view: !imgSelect.view }) : moveCarrusel(false); // Para cerrar el modal en la pagina de Create
+					setImage ? setImage({ ...imgSelect, view: !imgSelect.view }) : moveCarrusel(false);
 					document.onclick = null;
 				};
 			}}>

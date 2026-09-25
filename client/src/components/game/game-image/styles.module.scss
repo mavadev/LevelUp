@@ -19,8 +19,8 @@
     overflow: hidden;
     position: relative;
     border-radius: 10px;     
-    @include flex($direction: row, $justify: space-between, $align: center);
     .boxIcon{
+      top: 0;
       opacity: 0;
       width: 45%;
       height: 100%;

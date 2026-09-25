@@ -1,40 +1,40 @@
 @use '../../scss/variables.scss';
 @use '../../scss/mixins.scss';
-@use '../../scss/extends.scss';
 
 $field: #1c1c1c;
 $fieldBorder: #2a2a2a;
 $muted: #8c8c8c;
 
-#container{
+#container {
+  width: 100%;
   min-height: 100vh;
   background-color: $black;
-  #content{
+  #content {
     max-width: 1440px;
     margin: 0 auto;
     display: flex;
-    #createImage{
+    #createImage {
       flex: 40%;
-      max-height: 100vh;
-      position: relative;
-      overflow: hidden;
+      height: 100vh;
       position: sticky;
       top: 0;
-      .previewBg{
+      overflow: hidden;
+      .previewBg {
         height: 100%;
         background-size: cover;
         background-position: center;
         display: grid;
         place-items: center;
         filter: brightness(0.5);
-        p{
-          font-size: 16px;          
-          max-width: 50%;
+        p {
+          font-size: 16px;
+          max-width: 60%;
           text-align: center;
           line-height: 1.5;
+          color: $muted;
         }
       }
-      .previewOverlay{
+      .previewOverlay {
         padding: 80px 40px 40px;
         position: absolute;
         inset: 0;
@@ -44,10 +44,10 @@ $muted: #8c8c8c;
         justify-content: flex-end;
         background: linear-gradient(to top, #141414, transparent);
       }
-      .previewTag{
+      .previewTag {
         width: max-content;
         display: inline-block;
-        background: rgba(61, 220, 151, .15);
+        background: rgba(61, 220, 151, 0.15);
         color: $primary;
         font-size: 12px;
         font-weight: bold;
@@ -55,66 +55,71 @@ $muted: #8c8c8c;
         border-radius: 4px;
         margin-bottom: 10px;
       }
-      .boxInformation{
+      .boxInformation {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        .previewName{
+        gap: 16px;
+        .previewName {
           font-size: 28px;
           font-weight: bold;
           line-height: 1.15;
           overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
-        .previewRating{
-          color: $muted;
+        .previewRating {
+          color: $primary;
           font-size: 20px;
-          font-weight: semibold;
+          font-weight: 600;
+          white-space: nowrap;
         }
       }
     }
-    #createForm{
+    #createForm {
       flex: 60%;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-      padding: 120px 20px 120px 40px;
-      .header{
-        grid-column: 1/3;
-        #title{
+      padding: 60px 20px 60px 40px;
+      grid-template-columns: repeat(2, 1fr);
+      .header {
+        grid-column: 1 / 3;
+        #title {
           font-size: 24px;
           margin-bottom: 7px;
         }
-        p{
+        p {
           color: $muted;
         }
       }
-      .field{
-        &.fieldFull{
-          grid-column: 1/3;
+      .field {
+        &.fieldFull {
+          grid-column: 1 / 3;
         }
-        .information{
+
+        .information {
           height: 100%;
           display: flex;
           flex-direction: column;
-          .label{
+          .label {
             display: block;
             font-weight: 600;
             font-size: 13px;
             color: $muted;
             margin-bottom: 8px;
-            letter-spacing: .02em;
-            &.require::after{
+            letter-spacing: 0.02em;
+            &.require::after {
               content: '*';
               color: $primary;
-              padding: 0px 3px;
+              padding-left: 3px;
             }
           }
           input[type='text'],
           input[type='url'],
           input[type='date'],
           input[type='number'],
-          #inputDescription{
-            font-family: $fontPrimary;
+          .inputDescription {
+            font-family: $font-primary;
             width: 100%;
             border: 1px solid $fieldBorder;
             outline: none;
@@ -122,57 +127,62 @@ $muted: #8c8c8c;
             border-radius: 8px;
             background: $field;
             font-size: 15px;
-            transition: border-color .15s;
-            &::placeholder  {
+            color: #ffffff;
+            transition: border-color 0.15s;
+            &::placeholder {
               color: $muted;
             }
-            &:focus{
+            &:focus {
               border-color: $primary;
             }
           }
-          #inputDescription{
+          .inputDescription {
             height: 120px;
             resize: vertical;
             display: block;
           }
-          #inputRating{
-            display: none;            
+          .inputRating {
+            display: none;
           }
-          .boxRating{
+          .boxRating {
             display: flex;
             align-items: center;
             gap: 20px;
             height: 100%;
-            .stars{
+            .stars {
               font-size: 30px;
               display: flex;
               justify-content: space-between;
               margin-bottom: 4px;
-              color: $muted;
+              cursor: pointer;
+              user-select: none;
+              letter-spacing: 2px;
+              transition: background 0.1s linear;
             }
-            .ratingValue{
+            .ratingValue {
               flex: 1;
-              font-size: 26px;
-              height: max-content;
+              font-size: 24px;
               font-weight: bold;
+              color: $primary;
             }
           }
         }
-        .error{
-          color: $red;
+        .error {
+          color: #ff4d4f;
           font-size: 13px;
           margin-top: 6px;
           display: block;
         }
       }
-      .chipGroup{
+      .chipGroup {
         gap: 8px;
         display: flex;
         flex-wrap: wrap;
       }
-      .chip{
+      .chip {
         cursor: pointer;
         display: inline-flex;
+        align-items: center;
         gap: 6px;
         color: $muted;
         font-size: 13px;
@@ -180,47 +190,52 @@ $muted: #8c8c8c;
         background: $field;
         border-radius: 20px;
         border: 1px solid $fieldBorder;
-        transition: border-color .15s, color .15s, background .15s;
-        input{
+        user-select: none;
+        transition: border-color 0.15s, color 0.15s, background 0.15s;
+        input {
           position: absolute;
           width: 0;
           height: 0;
           opacity: 0;
           pointer-events: none;
         }
-        &:hover{
+        &:hover {
           border-color: $primary;
         }
-        &.selected{
+        &.selected {
           color: $primary;
           border-color: $primary;
-          background: rgba(61, 220, 151, .1);
+          background: rgba(61, 220, 151, 0.1);
         }
       }
-      #btnGroup{
+      #btnGroup {
         gap: 14px;
         display: flex;
-        grid-column: 1/3;
+        grid-column: 1 / 3;
         margin-top: 16px;
-        #btnReset{
+        #btnReset {
           border: 1px solid $fieldBorder;
           cursor: pointer;
           font-size: 15px;
           padding: 14px 22px;
           border-radius: 8px;
           background: transparent;
-          transition: color .15s, border-color .15s;
-          path{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: color 0.15s, border-color 0.15s;
+          path {
             color: $muted;
+            transition: color 0.15s;
           }
-          &:hover{
+          &:hover {
             border-color: $muted;
-            path{
-              color: white;
+            path {
+              color: #ffffff;
             }
           }
         }
-        #btnSubmit{
+        #btnSubmit {
           width: 100%;
           display: inline-block;
           white-space: nowrap;
@@ -239,91 +254,106 @@ $muted: #8c8c8c;
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba($primary, 0.5);
           }
-          &:disabled{
+          &:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
           }
         }
       }
     }
   }
-  #modalSend{
+  #modalSend {
     position: fixed;
     inset: 0;
     z-index: 92;
     display: grid;
     place-items: center;
-    background: $blackOpacity;
-    #content{
+    background: rgba(0, 0, 0, 0.7);
+    #content {
       gap: 15px;
       max-width: 90%;
       overflow: hidden;
       width: max-content;
       padding: 20px 40px;
       border-radius: 15px;
-      background: white;
+      background: #ffffff;
       position: relative;
       min-height: 0;
-      @include flex($direction: column, $justify: center, $align: center);
-      #loadingSend{
+      #loadingSend {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
         display: grid;
         place-items: center;
-        background: white;
+        background: #ffffff;
       }
-      .iconModal{
+      .iconModal {
         height: 50px;
         width: 50px;
-        &.check path{
+        &.check path {
           color: $primary;
         }
-        &.error path{
-          color: $red;
+        &.error path {
+          color: #ff4d4f;
         }
       }
-      #textModal{
+      #textModal {
         display: flex;
         flex-direction: column;
         gap: 5px;
         font-size: 18px;
-        color: $blackLow;
+        color: #1f1f1f;
         text-align: center;
-        span{
+        span {
           font-size: 16px;
-          color: $gray;
+          color: $muted;
         }
       }
-      #btnsModal{
+      #btnsModal {
         gap: 20px;
         display: flex;
-        .btn{
+        .btn {
           border-radius: 5px;
           padding: 10px 15px;
           background: $primary;
-          &.error{
-            background: $red;
+          &.error {
+            background: #ff4d4f;
           }
         }
       }
     }
   }
 }
-@media screen and (max-width: 900px){
-  #content{
-    flex-direction: column-reverse !important;
-    #createImage{
-      min-height: 260px !important;
-      border-right: none !important;
-      border-bottom: 1px solid $fieldBorder;
-    }
-    #createForm{
-      padding: 32px 24px !important;
-      grid-template-columns: 1fr !important;
-      .field.fieldFull, #title, #btnRow{
-        grid-column: 1/2 !important;
+
+@include tablet {
+  #container {
+    height: max-content;
+    #content {
+      height: max-content;
+      flex-direction: column-reverse;
+      #createForm {
+        flex: none;
+        width: 100%;
+        padding: 32px 24px;
+        grid-template-columns: 1fr;
+        .header,
+        .field,
+        .field.fieldFull,
+        #btnGroup {
+          grid-column: 1 / 2;
+        }
+      }
+      #createImage {
+        flex: none;
+        top: auto;
+        display: block;
+        height: 500px;
+        overflow: hidden;
+        position: relative;
+        border-bottom: 1px solid $fieldBorder;
       }
     }
   }

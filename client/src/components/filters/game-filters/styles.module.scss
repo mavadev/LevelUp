@@ -5,18 +5,16 @@
   width: 280px;
   background-color: #141414;
   border-radius: 5px;
-  padding: 20px;
+  padding: 20px 20px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-
   .filterHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
     h4 {
       font-size: 18px;
       font-weight: 700;
@@ -24,9 +22,8 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
     .closeBtn {
-      display: none; // Solo visible en pantallas móviles
+      display: none; 
       background: transparent;
       border: none;
       color: #888888;
@@ -39,12 +36,10 @@
       }
     }
   }
-
   .formFilter {
     display: flex;
     flex-direction: column;
     gap: 15px;
-
     .optionsList {
       display: flex;
       flex-direction: column;
@@ -53,7 +48,6 @@
       max-height: 220px;
       overflow-y: auto;
       padding-right: 5px;
-
       &::-webkit-scrollbar {
         width: 4px;
       }
@@ -61,93 +55,79 @@
         background-color: rgba($primary, 0.4);
         border-radius: 4px;
       }
-    }
-
-    .inputGroup {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      user-select: none;
-
-      &.disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-
-      .checkboxWrapper {
-        position: relative;
-        width: 18px;
-        height: 18px;
+      .inputGroup {
         display: flex;
         align-items: center;
-        justify-content: center;
-
-        input {
-          position: absolute;
-          opacity: 0;
-          width: 100%;
-          height: 100%;
-          cursor: pointer;
-          z-index: 2;
-
-          &:disabled {
-            cursor: not-allowed;
-          }
+        gap: 12px;
+        cursor: pointer;
+        user-select: none;
+        &.disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
         }
-
-        .customCheck {
-          position: absolute;
-          inset: 0;
-          background-color: #1f1f1f;
-          border: 2px solid rgba(255, 255, 255, 0.2);
-          border-radius: 4px;
+        .checkboxWrapper {
+          position: relative;
+          width: 18px;
+          height: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.2s ease;
-
-          .checkIcon {
-            font-size: 10px;
-            color: #0f0f0f;
+          input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+            &:disabled {
+              cursor: not-allowed;
+            }
           }
-
-          .radioDot {
-            width: 8px;
-            height: 8px;
-            background-color: #0f0f0f;
+          .customCheck {
+            position: absolute;
+            inset: 0;
+            background-color: #1f1f1f;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            .checkIcon {
+              font-size: 10px;
+              color: #0f0f0f;
+            }
+            .radioDot {
+              width: 8px;
+              height: 8px;
+              background-color: #0f0f0f;
+              border-radius: 50%;
+            }
+          }
+          input:checked + .customCheck {
+            background-color: $primary;
+            border-color: $primary;
+            box-shadow: 0 0 8px rgba($primary, 0.4);
+          }
+          input[type='radio'] + .customCheck {
             border-radius: 50%;
           }
+          input:focus + .customCheck {
+            border-color: $primary;
+          }
         }
-
-        input:checked + .customCheck {
-          background-color: $primary;
-          border-color: $primary;
-          box-shadow: 0 0 8px rgba($primary, 0.4);
-        }
-
-        input[type='radio'] + .customCheck {
-          border-radius: 50%;
-        }
-
-        input:focus + .customCheck {
-          border-color: $primary;
-        }
-      }
-
-      label {
-        font-size: 14px;
-        color: #cccccc;
-        cursor: pointer;
-        transition: color 0.2s ease;
-
-        &:hover {
-          color: #ffffff;
+        label {
+          font-size: 14px;
+          color: #cccccc;
+          cursor: pointer;
+          transition: color 0.2s ease;
+          &:hover {
+            color: #ffffff;
+          }
         }
       }
     }
-
-    .resetBtn {
+    .btnReset {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
@@ -169,19 +149,18 @@
   }
 }
 
-// Adaptación Responsiva Mobile/Tablet Drawer
-@media screen and (max-width: 992px) {
+@include tablet {
   .filtersWrapper {
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
     width: 300px;
-    z-index: 1000;
     border-radius: 0;
+    z-index: 1000;
+    padding: 100px 20px;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
-
     .filterHeader .closeBtn {
       display: block;
     }

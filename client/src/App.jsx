@@ -5,10 +5,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.scss';
 import MainLayout from './layouts/MainLayout';
+import { AppToaster } from './components/ui/AppToaster';
 import { Landing, Games, GameDetail, PostGame, About, NotFound, Category } from './containers';
 
 const App = () => (
 	<HelmetProvider>
+		<AppToaster />
 		<Provider store={store}>
 			<BrowserRouter>
 				<Routes>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
 import styles from './styles.module.scss';
 
@@ -8,78 +8,118 @@ const About = () => {
 		Frontend: [
 			{
 				name: 'Sass',
-				description: 'Preprocesador CSS que con características propias un lenguaje de programación.',
+				description: 'Preprocesador CSS con características avanzadas de lenguaje de programación.',
 			},
 			{
-				name: 'Css Modules',
-				description: 'Herramienta que cambia el nombre de clases y identificadores CSS en selectores únicos.',
+				name: 'CSS Modules',
+				description: 'Herramienta que genera selectores únicos para evitar colisiones de estilos.',
 			},
 			{
 				name: 'React',
-				description:
-					'Librería para la creación de componentes interactivos, reutilizables, para interfaces de usuario.',
+				description: 'Librería para la creación de componentes reutilizables e interfaces dinámicas.',
 			},
 			{
 				name: 'Redux',
-				description: 'Librería de JavaScript que te permite manejar el estado global de una aplicación.',
+				description: 'Librería para la gestión y centralización del estado global de la aplicación.',
 			},
 		],
 		Backend: [
 			{
-				name: 'Node Js',
-				description: 'Entorno de ejecución que se utiliza para ejecutar JavaScript fuera del navegador.',
+				name: 'Node.js',
+				description: 'Entorno de ejecución asíncrono para ejecutar JavaScript en el servidor.',
 			},
 			{
 				name: 'Express',
-				description: 'Framework para crear aplicaciones web, APIs y web services.',
+				description: 'Framework minimalista para la construcción de APIs REST y servicios web.',
 			},
 			{
-				name: 'Sequalize',
-				description: 'ORM para Node js que nos permite manipular varias bases de datos SQL.',
+				name: 'Sequelize',
+				description: 'ORM para Node.js enfocado en la manipulación de bases de datos relacionales SQL.',
 			},
 			{
 				name: 'PostgreSQL',
-				description: 'Sistema de gestión de bases de datos relacional orientado a objetos.',
+				description: 'Sistema de gestión de bases de datos relacional orientada a objetos.',
 			},
 		],
 	};
+
+	const containerVariants = {
+		hidden: { opacity: 0, y: 20 },
+		visible: {
+			opacity: 1,
+			y: 0,
+			transition: { duration: 0.5, staggerChildren: 0.1 },
+		},
+	};
+
+	const itemVariants = {
+		hidden: { opacity: 0, y: 15 },
+		visible: { opacity: 1, y: 0 },
+	};
+
 	return (
 		<>
-			<HelmetProvider>
-				<Helmet>
-					<title>Level Up | About</title>
-				</Helmet>
-			</HelmetProvider>
+			<Helmet>
+				<title>Level Up | About</title>
+			</Helmet>
 			<main id={styles.about}>
-				<section id={styles.content}>
+				<motion.section
+					id={styles.content}
+					initial='hidden'
+					animate='visible'
+					variants={containerVariants}>
 					<motion.h1
 						id={styles.title}
-						animate={{ opacity: [0, 1] }}>
+						variants={itemVariants}>
 						<span>¡Hola!</span> Soy Gianmarco y este es mi <br />
-						Proyecto Individual para el Bootcamp de <b about='Bootcamp de Programación.'>SoyHenry.</b>
+						Proyecto Individual para el Bootcamp de{' '}
+						<span
+							className={styles.tooltip}
+							data-tooltip='Bootcamp de Programación'>
+							SoyHenry.
+						</span>
 					</motion.h1>
-					<p id={styles.desc}>
-						Es una <b about='Single Page Application'>SPA</b> responsiva, desarollado con el fin de poner a prueba cada
-						una de las habilidades y tecnologías aprendidas durante el bootcamp, haciendo uso de Rawg, una{' '}
-						<b about='Application Programming Interface'>API</b> externa, la cual nos brinda la mayor base de datos de
-						videojuegos.
-					</p>
-					{Object.keys(skills).map((area, index) => (
-						<div
-							className={styles.group}
-							key={index}>
-							<h2 className={styles.area}>{area}</h2>
-							{skills[area].map((s, i) => (
-								<p
-									key={i}
-									className={styles.tec}>
-									{s.name}
-									<p className={styles.desc}>{s.description}</p>
-								</p>
-							))}
-						</div>
-					))}
-				</section>
+
+					<motion.p
+						id={styles.desc}
+						variants={itemVariants}>
+						Es una{' '}
+						<span
+							className={styles.tooltip}
+							data-tooltip='Single Page Application'>
+							SPA
+						</span>{' '}
+						responsiva, desarrollada para integrar las tecnologías aprendidas durante el bootcamp, haciendo uso de RAWG,
+						una{' '}
+						<span
+							className={styles.tooltip}
+							data-tooltip='Application Programming Interface'>
+							API
+						</span>{' '}
+						externa con un catálogo extenso de videojuegos.
+					</motion.p>
+
+					<div id={styles.skillsSection}>
+						{Object.keys(skills).map((area, index) => (
+							<motion.div
+								className={styles.group}
+								key={index}
+								variants={itemVariants}>
+								<h2 className={styles.area}>{area}</h2>
+								<div className={styles.cardsGrid}>
+									{skills[area].map((s, i) => (
+										<div
+											key={i}
+											className={styles.tecCard}>
+											<span className={styles.tecName}>{s.name}</span>
+											<span className={styles.tecDesc}>{s.description}</span>
+										</div>
+									))}
+								</div>
+							</motion.div>
+						))}
+					</div>
+				</motion.section>
 			</main>
 		</>
 	);

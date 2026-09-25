@@ -1,60 +1,139 @@
-@use '../../../scss/variables.scss';
-@use '../../../scss/mixins.scss';
+@use '../../../scss/variables' as *;
+@use '../../../scss/mixins' as *;
 
 #container {
   width: 100%;
-  z-index: 100;
+  z-index: 500;
   position: fixed;
-  background: linear-gradient($black, transparent);
+  top: 0;
+  left: 0;
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: sticky;
 }
-
-#navbar{
+#navbar {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 20px;
-  @include flex($direction: row, $justify: space-between, $align: center);
-  #logo{
-    top: 15px;
-    left: 0px;
-    height: 50px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  #logo {
+    height: 45px;
+    object-fit: contain;
+    display: block;
   }
-  #navigation{
-    font-weight: bold;
-    @include flex($direction: row, $justify: center, $align: center);
+  .hamburger {
+    display: none;
+    background: transparent;
+    border: none;
+    color: $text-light;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1001;
+    transition: color 0.3s ease;
+    &:hover {
+      color: $primary;
+    }
+  }
+  .navigation {
+    display: flex;
+    align-items: center;
     gap: 25px;
-    .option{
-      padding: 3px 0px;
+    font-weight: bold;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 0;
       text-transform: uppercase;
-      font-family: $fontPrimary;
-      &.active{
+      font-family: $font-primary;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      .icon {
+        display: none;
+        font-size: 18px;
+      }
+      &.active {
+        color: $primary;
         border-bottom: 2px solid $primary;
       }
-      &.desactive{
-        color: $whiteLow;
+      &.desactive {
+        color: $text-light;
+        &:hover {
+          color: $primary;
+        }
       }
     }
-    #btnCrear{
-      padding: 8px 15px;
-      border-radius: 5px;
-      border: 1px solid;
-      border-color: $primary;
+    #btnCrear {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: 1px solid $primary;
       background: transparent;
-      font-family: $fontPrimary;
+      color: $text-light;
+      font-family: $font-primary;
       text-transform: uppercase;
       font-weight: bold;
-      cursor: pointer;
-      &:hover{
-        background: $primaryDark;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      &:hover {
+        background: $primary;
+        box-shadow: 0 0 15px rgba($primary, 0.4);
       }
     }
   }
 }
-
-@media screen and (max-width: 768px) {
-  #navbar{
-    #navigation{
-      display: none;
+@include tablet {
+  #navbar {
+    .hamburger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .navigation {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: rgba(15, 15, 15, 0.98);
+      backdrop-filter: blur(16px);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 10px 0 25px 0;
+      border-bottom: 1px solid rgba($primary, 0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      &.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .option {
+        padding: 15px 25px;
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        .icon {
+          display: inline-flex;
+        }
+        &.active {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          background: rgba($primary, 0.15);
+          border-left: 4px solid $primary;
+        }
+      }
+      #btnCrear {
+        margin: 20px 25px 5px 25px;
+        text-align: center;
+      }
     }
   }
 }

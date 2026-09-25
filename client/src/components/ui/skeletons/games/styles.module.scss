@@ -1,0 +1,64 @@
+@use '../../../../scss/mixins.scss' as *;
+
+#listGames {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  width: 100%;
+  @include mobile {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}
+
+.skeletonCard {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  @include tablet{
+    height: auto;
+    aspect-ratio: 1/1;
+  }
+  .skeletonMedia {
+    width: 100%;
+    background-color: #242424;
+    animation: skeletonPulse 1.5s infinite ease-in-out;
+  }
+  .skeletonBody {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .skeletonTitle {
+      height: 18px;
+      width: 80%;
+      background-color: #242424;
+      border-radius: 4px;
+      animation: skeletonPulse 1.5s infinite ease-in-out;
+    }
+    .skeletonTag {
+      height: 12px;
+      width: 40%;
+      background-color: #242424;
+      border-radius: 4px;
+      animation: skeletonPulse 1.5s infinite ease-in-out;
+    }
+  }
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-color: #1f1f1f;
+  }
+  50% {
+    background-color: #2e2e2e;
+  }
+  100% {
+    background-color: #1f1f1f;
+  }
+}

@@ -1,10 +1,19 @@
 @import 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
 
-$red: #e71c1c;
-$whiteLow: #dcdcdc;
-$primary: #2cc1a1;
-$primaryDark: #26a78b;
-$primaryDark2: #156b58;
+// Paleta Principal (Level Up)
+$bg-dark: #0f0f0f;
+$bg-card: rgba(20, 20, 20, 0.95);
+$primary: #2cc1a1; // Tu color de acento principal
+$primary-dark: #26a78b;
+$text-light: #efefef;
+$text-muted: #b3b3b3;
+
+// Sombras y Efectos Glow
+$glow-primary: 0 0 25px hsla(243, 100%, 69%, 0.4);
+$glow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+
+
 $black: #141414;
 $blackLow: #242424;
 $lanFondo: #0e0e0e;
@@ -15,5 +24,5 @@ $grayOpacity: #80808040;
 $grayLight: #b1b1b1;
 $grayDark: #4e4e4e;
 
-$fontPrimary: 'Poppins', sans-serif;
-$fontSecondary: 'Montserrat', sans-serif;
+$font-primary: 'Poppins', sans-serif;
+$font-secondary: 'Montserrat', sans-serif;

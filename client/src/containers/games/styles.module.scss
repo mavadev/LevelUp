@@ -1,12 +1,11 @@
 @use '../../scss/variables.scss';
 @use '../../scss/mixins.scss';
-@use '../../scss/extends.scss';
 
 .gamesPage {
   width: 100%;
   min-height: 100vh;
   background-color: $lanFondo;
-  padding: 100px 20px;
+  padding: 30px 20px;
   .container {
     width: 100%;
     max-width: 1440px;
@@ -57,37 +56,6 @@
             color: $primary;
           }
         }
-        .search {
-          position: relative;
-          display: flex;
-          align-items: center;
-          .searchIcon {
-            position: absolute;
-            left: 14px;
-            color: #888888;
-          }
-          .searchInput {
-            width: 280px;
-            padding: 10px 14px 10px 40px;
-            background-color: #141414;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s ease;
-
-            &:focus {
-              border-color: $primary;
-            }
-          }
-          .clearIcon {
-            position: absolute;
-            right: 14px;
-            color: #4d4d4d;
-            cursor: pointer;
-          }
-        }
       }
     }
     .contentLayout {
@@ -98,38 +66,39 @@
       #sectionFilters {
         position: sticky;
         top: 20px;
+        z-index: 100;
       }
       #sectionGames {
         width: 100%;
+        z-index: 1;
       }
     }
   }
 }
 
-@media screen and (max-width: 992px) {
-  .gamesPage .container {
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-      .actionsGroup {
-        width: 100%;
-        justify-content: space-between;
-        .switchFilter {
-          display: flex; 
-        }
-        .search {
-          flex: 1;
-          margin-left: 10px;
-          .searchInput {
-            width: 100%;
+@include tablet {
+  .gamesPage {
+    padding: 0px 20px;
+    .container{
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px 0px 20px;
+        margin-bottom: 0;
+        .actionsGroup {
+          width: 100%;
+          flex-direction: row-reverse;
+          justify-content: space-between;
+          .switchFilter {
+            display: flex; 
           }
         }
       }
-    }
-    .contentLayout {
-      grid-template-columns: 1fr; 
-      .sidebar {
-        display: none; 
+      .contentLayout {
+        grid-template-columns: 1fr; 
+        .sidebar {
+          display: none; 
+        }
       }
     }
   }

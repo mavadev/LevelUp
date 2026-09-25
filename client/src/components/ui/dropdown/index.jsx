@@ -1,29 +1,36 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
 
 const Dropdown = ({ drop, setDrop, select, title, children }) => {
+	const isOpen = Boolean(drop[select]);
+
 	return (
 		<section className={styles.dropdown}>
 			<header
 				className={styles.header}
-				onClick={() => setDrop({ ...drop, [select]: !drop[select] })}>
+				onClick={() => setDrop({ ...drop, [select]: !isOpen })}>
 				<p className={styles.text}>{title}</p>
-				<FaChevronDown
-					className={styles.icon}
-					style={{ transform: drop[select] ? 'rotate(-180deg)' : 'rotate(0deg)' }}
-				/>
+				<motion.div
+					animate={{ rotate: isOpen ? 180 : 0 }}
+					transition={{ duration: 0.2, ease: 'easeInOut' }}>
+					<FaChevronDown className={styles.icon} />
+				</motion.div>
 			</header>
-			<motion.div
-				className={styles.drop}
-				animate={
-					!drop[select]
-						? { y: '-100%', opacity: 0, height: '0px', overflow: 'hidden' }
-						: { y: '0', opacity: 1, height: 'max-content', marginBottom: '15px' }
-				}>
-				{children}
-			</motion.div>
+
+			<AnimatePresence initial={false}>
+				{isOpen && (
+					<motion.div
+						className={styles.dropContainer}
+						initial={{ height: 0, opacity: 0 }}
+						animate={{ height: 'auto', opacity: 1 }}
+						exit={{ height: 0, opacity: 0 }}
+						transition={{ duration: 0.25, ease: 'easeInOut' }}>
+						<div className={styles.dropContent}>{children}</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</section>
 	);
 };
