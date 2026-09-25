@@ -3,7 +3,7 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 
 import styles from './styles.module.scss';
-import { LogoColor } from '../../../assets';
+import { colorLogo } from '../../../assets';
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ const Navbar = () => {
 					onClick={closeMenu}>
 					<img
 						alt='Level Up'
-						src={LogoColor}
+						src={colorLogo}
 						id={styles.logo}
 					/>
 				</Link>

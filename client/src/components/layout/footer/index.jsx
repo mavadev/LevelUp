@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
-import { LogoWhite } from '../../../assets';
+import { whiteLogo } from '../../../assets';
 
 const Footer = () => (
 	<footer id={styles.footer}>
@@ -11,7 +11,7 @@ const Footer = () => (
 					<Link to='/'>
 						<img
 							alt='Level Up'
-							src={LogoWhite}
+							src={whiteLogo}
 							id={styles.logo}
 						/>
 					</Link>

@@ -1,4 +1,4 @@
 export { default as defaultGameCard } from './default/game_card.png';
 
-export { default as LogoWhite } from './logo/white.svg';
-export { default as LogoColor } from './logo/color.svg';
+export { default as whiteLogo } from './logo/white.svg';
+export { default as colorLogo } from './logo/color.svg';
